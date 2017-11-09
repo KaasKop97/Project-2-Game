@@ -15,9 +15,7 @@ done = False
 game_loaded = False
 menu_drawn = False
 game_loaded_name = None
-menu_items = ["PLAY", "ABOUT", "CREDITS", "QUIT"]
-# menu_items.extend(games.games_in_path)
-# print(menu_items)
+menu_items = ["PLAY", "ABOUT", "SETTINGS", "CREDITS", "QUIT"]
 
 # Here we initialize a window for the game itself, in the future we'll check the settings if its fullscreen or not
 screen = pygame.display.set_mode([int(conf.get_value("game", "width")), int(conf.get_value("game", "height"))])
@@ -33,8 +31,8 @@ background.fill((255, 255, 255))
 
 # Drawing the buttons of the menu outside of the while loop to prevent it from repeated draws.
 for i in range(len(menu_items)):
-    menu.make_button(background, (255, 255, 255), 10, 10 + (40 * i), 75, 30, menu_items[i])
-    logger.write_log("INFO", "Drawing button: " + menu_items[i])
+    menu.create_button(background, (255, 255, 255), int(conf.get_value("game", "width")) // 2 - 55, 10 + (40 * i), 85, 30, menu_items[i])
+    logger.write_log("DEBUG", "Drawing button: " + menu_items[i])
 
 # Everything in this while loop is called once per frame. So be careful!
 while not done:
@@ -53,11 +51,23 @@ while not done:
         for event in pygame.event.get():
             if event.type == pygame.MOUSEBUTTONDOWN:
                 # Check if button is pressed here.
-                menu.button_pressed(event.pos)
-                logger.write_log("DEBUG", "Mouse button pressed.")
-
+                menu_selection = menu.button_pressed(event.pos)
+                logger.write_log("DEBUG", "Button pressed: " + str(menu_selection))
+                # TODO: make a if statement for all menu selections
+                if menu_selection == "PLAY":
+                    menu.reset(background, (255, 255, 255))
+                    for i in range(len(games.games_in_path)):
+                        menu.create_button(background, (255, 255, 255), int(conf.get_value("game", "width")) // 2 - 55, 10 + (40 * i), 85, 30, games.games_in_path[i])
+                        if i == len(games.games_in_path) - 1:
+                            menu.create_button(background, (255, 255, 255), 10, 10 + (80 * i), 85, 30, "BACK")
+                if menu_selection == "QUIT":
+                    # Now the quit button works, no more SAO flashbacks 8).
+                    # TODO: make a confirmation message "Do you really wanna quit"
+                    done = True
+                if menu_selection == "BACK":
+                    print("You wanna go back ayy?")
             elif event.type == pygame.QUIT:
-                print("DEBUG: Event quit fired, stopping program." if conf.get_value("development", "debug") else "")
+                logger.write_log("DEBUG", "Quitting...")
                 done = True
 
     screen.blit(background, (0, 0))
