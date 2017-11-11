@@ -1,11 +1,12 @@
 import pygame
+import os
 
-from handlers import config_handler, game_load_handler
+from handlers import config_handler, game_handler
 from helpers import menu_helper, settings_helper, log_helper
 
 # Creating the objects for the configuration handler, game loading, and menu.
 conf = config_handler.ConfigHandler()
-games = game_load_handler.GameLoadHandler()
+game_loader = game_handler.GameLoadHandler()
 menu = menu_helper.MenuHelper()
 logger = log_helper.LogHelper()
 
@@ -15,7 +16,6 @@ done = False
 game_loaded = False
 menu_drawn = False
 game_loaded_name = None
-menu_items = ["PLAY", "ABOUT", "SETTINGS", "CREDITS", "QUIT"]
 
 # Here we initialize a window for the game itself, in the future we'll check the settings if its fullscreen or not
 screen = pygame.display.set_mode([int(conf.get_value("game", "width")), int(conf.get_value("game", "height"))])
@@ -27,12 +27,10 @@ pygame.display.set_caption(conf.get_value("game", "caption"))
 clock = pygame.time.Clock()
 background = pygame.Surface(screen.get_size())
 background = background.convert(background)
-background.fill((255, 255, 255))
+menu.set_background(background, os.path.join("menu", "background.jpg"))
 
 # Drawing the buttons of the menu outside of the while loop to prevent it from repeated draws.
-for i in range(len(menu_items)):
-    menu.create_button(background, (255, 255, 255), int(conf.get_value("game", "width")) // 2 - 55, 10 + (40 * i), 85, 30, menu_items[i])
-    logger.write_log("DEBUG", "Drawing button: " + menu_items[i])
+menu.draw_main_menu(background)
 
 # Everything in this while loop is called once per frame. So be careful!
 while not done:
@@ -43,7 +41,9 @@ while not done:
     if game_loaded:
         for event in pygame.event.get():
             if event.type == pygame.MOUSEBUTTONDOWN:
-                game_loaded_name = "Gets the currently loaded game and then use that to access the class where all the logic is"
+                game_loader.mousebutton_down(event.pos)
+            elif event.type == pygame.MOUSEBUTTONUP:
+                game_loader.mousebutton_up( event.pos)
             elif event.type == pygame.QUIT:
                 done = True
     else:
@@ -53,19 +53,24 @@ while not done:
                 # Check if button is pressed here.
                 menu_selection = menu.button_pressed(event.pos)
                 logger.write_log("DEBUG", "Button pressed: " + str(menu_selection))
-                # TODO: make a if statement for all menu selections
+                # TODO: make an if statement for all menu selections
                 if menu_selection == "PLAY":
-                    menu.reset(background, (255, 255, 255))
-                    for i in range(len(games.games_in_path)):
-                        menu.create_button(background, (255, 255, 255), int(conf.get_value("game", "width")) // 2 - 55, 10 + (40 * i), 85, 30, games.games_in_path[i])
-                        if i == len(games.games_in_path) - 1:
-                            menu.create_button(background, (255, 255, 255), 10, 10 + (80 * i), 85, 30, "BACK")
-                if menu_selection == "QUIT":
+                    menu.draw_game_selection(background)
+                elif menu_selection == "QUIT":
                     # Now the quit button works, no more SAO flashbacks 8).
                     # TODO: make a confirmation message "Do you really wanna quit"
                     done = True
-                if menu_selection == "BACK":
-                    print("You wanna go back ayy?")
+                elif menu_selection == "BACK":
+                    # Should save somewhere where we came from and then return to that.
+                    menu.go_back(background)
+                elif menu_selection == "clicker":
+                    menu.reset(background)
+                    game_loader.load_game("clicker", background)
+                    game_loaded = True
+                elif menu_selection == "memes":
+                    menu.reset(background)
+                    game_loader.load_game("memes", background)
+                    game_loaded = True
             elif event.type == pygame.QUIT:
                 logger.write_log("DEBUG", "Quitting...")
                 done = True

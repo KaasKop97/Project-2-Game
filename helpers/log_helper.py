@@ -3,7 +3,7 @@ from handlers import config_handler
 
 class LogHelper:
     def __init__(self):
-        self.allowed_log_levels = ["DEBUG", "INFO", "WARN"]
+        self.allowed_log_levels = ["DEBUG", "INFO", "WARN", "ERROR"]
         self.conf_handler = config_handler.ConfigHandler()
 
     def write_log(self, log_level, log_message):
