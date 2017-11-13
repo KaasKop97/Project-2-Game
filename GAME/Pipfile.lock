@@ -1,0 +1,21 @@
+{
+    "_meta": {
+        "hash": {
+            "sha256": "ada75b984259b438b07e8dba280b88980f9159f91b404e7c2d5d32e5a5644110"
+        },
+        "requires": {},
+        "sources": [
+            {
+                "name": "pypi",
+                "url": "https://pypi.python.org/simple",
+                "verify_ssl": true
+            }
+        ]
+    },
+    "default": {
+        "pygame": {
+            "version": "==1.9.3"
+        }
+    },
+    "develop": {}
+}
