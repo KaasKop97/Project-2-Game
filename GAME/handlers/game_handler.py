@@ -1,10 +1,10 @@
 import os
-from games.clicker import clicker
+from games.DRON import DRON
 from games.memes import memes
 from helpers import log_helper
 
 
-class GameLoadHandler:
+class GameHandler:
     def __init__(self):
         self.games_path = os.path.join(os.getcwd(), "games/")
         self.games_in_path = os.listdir(self.games_path)
@@ -22,13 +22,15 @@ class GameLoadHandler:
         if game_name in self.games_in_path and not None:
             self.loaded_game = game_name
             self.log.write_log("INFO", "GAME: " + self.loaded_game + " loaded.")
-            if game_name == "clicker":
-                self.game = clicker.Clicker()
+            if game_name == "DRON":
+                self.game = DRON.Dron()
             elif game_name == "memes":
                 self.game = memes.Memes()
         else:
             print("Game does not exist nigge")
-        self.game.main(surface)
+
+    def main_loop(self):
+        self.game.update(self.surface)
 
     def mousebutton_down(self, event):
         try:
@@ -42,6 +44,12 @@ class GameLoadHandler:
         except AttributeError as e:
             self.log.write_log("ERROR", "mousebutton_up error: " + str(e))
 
+    def key_input(self, event):
+        try:
+            self.game.key_input(self.surface, event)
+        except AttributeError as e:
+            self.log.write_log("ERROR", "key_input error: " + str(e))
+
     # def mousemotion(self, event):
     #     try:
     #         self.game.mousemotion(event)
@@ -52,4 +60,4 @@ class GameLoadHandler:
         # This unloads the current running game
         print("Unload game ayy?")
         # This will revert the game back to the original while loop which is the main menu
-
+        self.loaded_game = None
