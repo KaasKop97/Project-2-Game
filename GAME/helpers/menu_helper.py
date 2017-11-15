@@ -12,7 +12,7 @@ class MenuHelper:
         self.font = pygame.font.init()
         self.font = pygame.font.SysFont('Verdana', 15)
         self.config = config_handler.ConfigHandler()
-        self.game_loader = game_handler.GameLoadHandler()
+        self.game_loader = game_handler.GameHandler()
 
         self.log = log_helper.LogHelper()
 
@@ -28,7 +28,8 @@ class MenuHelper:
             coords_split = self.menu_items_coord[i].split()
 
             if int(coords_split[1]) <= int(click_position[0]) <= int(coords_split[1]) + int(coords_split[3]) and \
-               int(coords_split[2]) <= int(click_position[1]) <= int(coords_split[2]) + int(coords_split[4]):
+                                    int(coords_split[2]) <= int(click_position[1]) <= int(coords_split[2]) + int(
+                        coords_split[4]):
                 return coords_split[0]
 
     def draw_main_menu(self, surface):
@@ -45,6 +46,9 @@ class MenuHelper:
                                10 + (40 * i), 85, 30, self.game_loader.games_in_path[i])
             if i == len(self.game_loader.games_in_path) - 1:
                 self.create_button(surface, (255, 255, 255), 10, 10 + (80 * i), 85, 30, "BACK")
+
+    def draw_pop_up(self, surface, text, button_text):
+        print(str(surface) + " " + str(text) + " " + str(button_text))
 
     def go_back(self, surface):
         self.log.write_log("DEBUG", str(self.menu_selected))
@@ -64,7 +68,8 @@ class MenuHelper:
 
     def set_background(self, surface, image):
         bg_img = pygame.image.load(image)
-        bg_img = pygame.transform.scale(bg_img, (int(self.config.get_value("game", "width")), int(self.config.get_value("game", "height"))))
+        bg_img = pygame.transform.scale(bg_img, (
+        int(self.config.get_value("game", "width")), int(self.config.get_value("game", "height"))))
         image_rect = bg_img.get_rect()
 
         surface.blit(bg_img, image_rect)
@@ -72,6 +77,6 @@ class MenuHelper:
     def get_last_button_coords(self):
         return self.menu_items_coord[-1]
 
-    def reset(self, surface, colour = (255, 255, 255)):
+    def reset(self, surface, colour=(255, 255, 255)):
         self.menu_items_coord.clear()
         surface.fill(colour)
