@@ -1,33 +1,37 @@
 import os
 from games.DRON import DRON
-from games.memes import memes
+from games.Zone_Trespassers import Zone_Trespassers
 from helpers import log_helper
 
 
 class GameHandler:
     def __init__(self):
-        self.games_path = os.path.join(os.getcwd(), "games/")
-        self.games_in_path = os.listdir(self.games_path)
         self.loaded_game = None
         self.game = None
         self.surface = None
         self.log = log_helper.LogHelper()
+        self.DRON = DRON.Dron()
+        self.ZT = Zone_Trespassers.ZoneTrespassers()
 
-        if not os.path.exists(self.games_path):
-            raise IOError
+        self.game_names = [
+            self.DRON.game_name,
+            self.ZT.game_name
+        ]
 
     def load_game(self, game_name, surface):
         # This will load a specific game from the games directory
         self.surface = surface
-        if game_name in self.games_in_path and not None:
+        if game_name in self.game_names:
             self.loaded_game = game_name
             self.log.write_log("INFO", "GAME: " + self.loaded_game + " loaded.")
             if game_name == "DRON":
-                self.game = DRON.Dron()
-            elif game_name == "memes":
-                self.game = memes.Memes()
-        else:
-            print("Game does not exist nigge")
+                self.game = self.DRON
+                self.game.load()
+            elif game_name == "Zone Trespassers":
+                self.game = self.ZT
+                self.game.load()
+            else:
+                print("Game does not exist")
 
     def main_loop(self):
         self.game.update(self.surface)
@@ -46,10 +50,11 @@ class GameHandler:
 
     def key_input(self, event):
         try:
-            self.game.key_input(self.surface, event)
+            self.game.key_input(event)
         except AttributeError as e:
             self.log.write_log("ERROR", "key_input error: " + str(e))
 
+    # Not sure if i'll keep this in, prob not.
     # def mousemotion(self, event):
     #     try:
     #         self.game.mousemotion(event)

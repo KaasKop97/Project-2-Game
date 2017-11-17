@@ -13,6 +13,7 @@ class MenuHelper:
         self.font = pygame.font.SysFont('Verdana', 15)
         self.config = config_handler.ConfigHandler()
         self.game_loader = game_handler.GameHandler()
+        self.game_names = self.game_loader.game_names
 
         self.log = log_helper.LogHelper()
 
@@ -20,12 +21,13 @@ class MenuHelper:
         pygame.draw.rect(surface, colour, (x, y, width, height))
 
         label = self.font.render(text, 1, text_colour)
-        self.menu_items_coord.append(str(text) + " " + str(x) + " " + str(y) + " " + str(width) + " " + str(height))
+        self.menu_items_coord.append(str(text) + ", " + str(x) + ", " + str(y) + ", " + str(width) + ", " + str(height))
         surface.blit(label, (x + 2, y))  # Renders the label just above the bottom of the button
 
     def button_pressed(self, click_position):
         for i in range(len(self.menu_items_coord)):
-            coords_split = self.menu_items_coord[i].split()
+            coords_split = self.menu_items_coord[i].split(",")
+            print(coords_split)
 
             if int(coords_split[1]) <= int(click_position[0]) <= int(coords_split[1]) + int(coords_split[3]) and \
                                     int(coords_split[2]) <= int(click_position[1]) <= int(coords_split[2]) + int(
@@ -41,10 +43,10 @@ class MenuHelper:
     def draw_game_selection(self, surface):
         self.menu_selected = "PLAY"
         self.reset(surface, (255, 255, 255))
-        for i in range(len(self.game_loader.games_in_path)):
+        for i in range(len(self.game_names)):
             self.create_button(surface, (255, 255, 255), int(self.config.get_value("game", "width")) // 2 - 55,
-                               10 + (40 * i), 85, 30, self.game_loader.games_in_path[i])
-            if i == len(self.game_loader.games_in_path) - 1:
+                               10 + (40 * i), 85, 30, self.game_names[i])
+            if i == len(self.game_names) - 1:
                 self.create_button(surface, (255, 255, 255), 10, 10 + (80 * i), 85, 30, "BACK")
 
     def draw_pop_up(self, surface, text, button_text):

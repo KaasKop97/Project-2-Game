@@ -14,16 +14,23 @@ class Dron:
         self.sprites = pygame.sprite.RenderPlain(self.bike1)
 
     def update(self, surface):
+        if self.bike1.dead:
+            self.stop_game()
         self.bike1.move()
         self.bike1.draw(surface)
 
+    def load(self):
+        return True
+
     def mousebutton_down(self, surface, position):
+        # I do not need dis for my game
         pass
 
     def mousebutton_up(self, surface, position):
+        # I do not need dis for my game
         pass
 
-    def key_input(self, surface, key):
+    def key_input(self, key):
         if key == 97 or key == 276:
             # "A" or arrow left key
             self.bike1.direction = "left"
@@ -41,5 +48,5 @@ class Dron:
             print("Should kill the game")
 
     def stop_game(self):
-
+        print("Stopping game.")
         pass
