@@ -14,16 +14,16 @@ class ZoneTrespassers:
         # This methods gets called every frame so be careful with this one.
         pass
 
-    def mousebutton_down(self):
+    def mousebutton_down(self, surface, event):
         # If you need to do an action on mousebutton while it's in the down position then use this
         pass
 
-    def mousebutton_up(self):
+    def mousebutton_up(self, surface, event):
         # If you need to do an action on mousebutton while it's in the up position (after a down) then use this
         pass
 
     def key_input(self, key):
-        # If you need to do an action on key inputs use this access key codes
+        # If you need to do an action on key inputs use this access key codes, check DRON.py for examples
         pass
 
     def stop_game(self):

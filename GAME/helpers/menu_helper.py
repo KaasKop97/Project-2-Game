@@ -1,4 +1,5 @@
 import pygame
+import os
 
 from handlers import config_handler, game_handler
 from helpers import log_helper
@@ -6,7 +7,7 @@ from helpers import log_helper
 
 class MenuHelper:
     def __init__(self):
-        self.menu_items = ["PLAY", "ABOUT", "SETTINGS", "CREDITS", "QUIT"]
+        self.main_menu_items = ["PLAY", "ABOUT", "SETTINGS", "CREDITS", "QUIT GAME"]
         self.menu_items_coord = []
         self.menu_selected = []
         self.font = pygame.font.init()
@@ -27,7 +28,6 @@ class MenuHelper:
     def button_pressed(self, click_position):
         for i in range(len(self.menu_items_coord)):
             coords_split = self.menu_items_coord[i].split(",")
-            print(coords_split)
 
             if int(coords_split[1]) <= int(click_position[0]) <= int(coords_split[1]) + int(coords_split[3]) and \
                                     int(coords_split[2]) <= int(click_position[1]) <= int(coords_split[2]) + int(
@@ -35,13 +35,14 @@ class MenuHelper:
                 return coords_split[0]
 
     def draw_main_menu(self, surface):
-        self.menu_selected = "MAIN"
-        for i in range(len(self.menu_items)):
+        self.set_background(surface, os.path.join("menu", "background.png"))
+        self.add_to_back("main")
+        for i in range(len(self.main_menu_items)):
             self.create_button(surface, (255, 255, 255), int(self.config.get_value("game", "width")) // 2 - 55,
-                               10 + (40 * i), 85, 30, self.menu_items[i])
+                               10 + (40 * i), 85, 30, self.main_menu_items[i])
 
     def draw_game_selection(self, surface):
-        self.menu_selected = "PLAY"
+        self.add_to_back("game_selection")
         self.reset(surface, (255, 255, 255))
         for i in range(len(self.game_names)):
             self.create_button(surface, (255, 255, 255), int(self.config.get_value("game", "width")) // 2 - 55,
@@ -54,27 +55,24 @@ class MenuHelper:
 
     def go_back(self, surface):
         self.log.write_log("DEBUG", str(self.menu_selected))
-        if self.menu_selected in self.menu_items:
-            if self.menu_selected == "MAIN":
-                self.draw_main_menu(surface)
-            elif self.menu_selected == "PLAY":
-                self.draw_game_selection(surface)
-            elif self.menu_selected == "ABOUT":
-                self.draw_about(surface)
-            elif self.menu_selected == "SETTINGS":
-                self.draw_settings(surface)
-            elif self.menu_selected == "CREDITS":
-                self.draw_credits(surface)
-        else:
-            return False
+        self.reset(surface)
+        #TODO Add all menu selections and their methods
+        if self.menu_selected[0] == "main":
+            self.draw_main_menu(surface)
+        elif self.menu_selected[0] == "game_selection":
+            self.draw_game_selection(surface)
 
     def set_background(self, surface, image):
         bg_img = pygame.image.load(image)
         bg_img = pygame.transform.scale(bg_img, (
-        int(self.config.get_value("game", "width")), int(self.config.get_value("game", "height"))))
+            int(self.config.get_value("game", "width")), int(self.config.get_value("game", "height"))))
         image_rect = bg_img.get_rect()
 
         surface.blit(bg_img, image_rect)
+
+    def add_to_back(self, menu_name):
+        self.menu_selected.append(menu_name)
+        print(self.menu_selected)
 
     def get_last_button_coords(self):
         return self.menu_items_coord[-1]
