@@ -1,4 +1,3 @@
-import pygame
 from games.DRON import DRON
 from games.Zone_Trespassers import Zone_Trespassers
 from helpers import log_helper
