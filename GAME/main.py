@@ -1,5 +1,4 @@
 import pygame
-import os
 
 from handlers import config_handler, game_handler
 from helpers import menu_helper, settings_helper, log_helper

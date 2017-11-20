@@ -7,7 +7,7 @@ class ZoneTrespassers:
         self.author = "Cherie"
 
     def load(self):
-        # This is the first thing thats called, load stuff here or just call update your call. Must return a boolean
+        # This is the first thing thats called, load stuff here. Must return a boolean!!
         return True
 
     def update(self, surface):
