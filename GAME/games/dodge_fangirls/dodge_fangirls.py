@@ -1,7 +1,7 @@
 import pygame
 
 
-class ZoneTrespassers:
+class DodgeFangirls:
     def __init__(self):
         self.game_name = "Dodge the Fangirls"
         self.author = "Charone"

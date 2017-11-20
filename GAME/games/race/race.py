@@ -1,7 +1,7 @@
 import pygame
 
 
-class ZoneTrespassers:
+class Race:
     def __init__(self):
         self.game_name = "Race"
         self.author = "Aman"
