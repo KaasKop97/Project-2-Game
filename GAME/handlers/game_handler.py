@@ -1,5 +1,5 @@
 from games.DRON import DRON
-from games.Zone_Trespassers import Zone_Trespassers
+from games.Galaxy_Trespassers import Galaxy_Trespassers
 from helpers import log_helper
 
 
@@ -10,11 +10,11 @@ class GameHandler:
         self.surface = None
         self.log = log_helper.LogHelper()
         self.DRON = DRON.Dron()
-        self.ZT = Zone_Trespassers.ZoneTrespassers()
+        self.GT = Galaxy_Trespassers.ZoneTrespassers()
 
         self.game_names = [
             self.DRON.game_name,
-            self.ZT.game_name
+            self.GT.game_name
         ]
 
     def load_game(self, game_name, surface):
@@ -27,7 +27,7 @@ class GameHandler:
                 self.game = DRON.Dron()
                 self.game.load()
             elif game_name == "Zone Trespassers":
-                self.game = self.ZT
+                self.game = self.T
                 self.game.load()
             else:
                 print("Game does not exist")
