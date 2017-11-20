@@ -15,7 +15,7 @@ class Dron:
 
     def update(self, surface):
         if self.bike1.dead:
-            self.stop_game()
+            self.player_dead()
         self.bike1.move()
         self.bike1.draw(surface)
 
@@ -47,6 +47,11 @@ class Dron:
             self.stop_game()
             print("Should kill the game")
 
+    def player_dead(self):
+        print("Display a message saying that the user is dead and is able to try again or something")
+
     def stop_game(self):
-        print("Stopping game.")
-        pass
+        self.bike1 = None
+        self.font = None
+        self.sprites = None
+        print("Stopping game")

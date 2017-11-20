@@ -73,7 +73,6 @@ class GameHandler:
     #         self.log.write_log("ERROR", "mousemotion error: " + str(e))
 
     def unload_game(self):
-        # This unloads the current running game
-        print("Unload game ayy?")
-        # This will revert the game back to the original while loop which is the main menu
         self.loaded_game = None
+        self.game.stop_game()
+

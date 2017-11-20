@@ -56,10 +56,11 @@ class MenuHelper:
     def go_back(self, surface):
         self.log.write_log("DEBUG", str(self.menu_selected))
         self.reset(surface)
+        menu_selected_length = len(self.menu_selected)
         #TODO Add all menu selections and their methods
-        if self.menu_selected[0] == "main":
+        if self.menu_selected[menu_selected_length - 1] == "main":
             self.draw_main_menu(surface)
-        elif self.menu_selected[0] == "game_selection":
+        elif self.menu_selected[menu_selected_length - 1] == "game_selection":
             self.draw_game_selection(surface)
 
     def set_background(self, surface, image):
@@ -71,7 +72,8 @@ class MenuHelper:
         surface.blit(bg_img, image_rect)
 
     def add_to_back(self, menu_name):
-        self.menu_selected.append(menu_name)
+        if self.menu_selected and not self.menu_selected[len(self.menu_selected)] == menu_name:
+            self.menu_selected.append(menu_name)
         print(self.menu_selected)
 
     def get_last_button_coords(self):

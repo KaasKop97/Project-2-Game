@@ -12,7 +12,6 @@ logger = log_helper.LogHelper()
 pygame.init()
 
 done = False
-game_loaded = False
 
 # Here we initialize a window for the game itself, in the future we'll check the settings if its fullscreen or not
 screen = pygame.display.set_mode([int(conf.get_value("game", "width")), int(conf.get_value("game", "height"))])
@@ -25,7 +24,6 @@ clock = pygame.time.Clock()
 background = pygame.Surface(screen.get_size())
 background = background.convert(background)
 
-# Drawing the buttons of the menu outside of the while loop to prevent it from repeated draws.
 menu.draw_main_menu(background)
 
 # Everything in this while loop is called once per frame. So be careful!
@@ -33,7 +31,8 @@ while not done:
     # Limit the fps and resources used to 60 times a second
     clock.tick(60)
 
-    if game_loaded:
+    if game_handler.loaded_game is not None:
+        game_handler.main_loop()
         for event in pygame.event.get():
             if event.type == pygame.MOUSEBUTTONDOWN:
                 game_handler.mousebutton_down(event.pos)
@@ -41,9 +40,12 @@ while not done:
                 game_handler.mousebutton_up(event.pos)
             elif event.type == pygame.KEYDOWN:
                 game_handler.key_input(event.key)
+                if event.key == 27:
+                    game_handler.unload_game()
+                    menu.draw_main_menu(background)
+                    break
             elif event.type == pygame.QUIT:
                 done = True
-        game_handler.main_loop()
     else:
         # This pretty much means that we're in the main menu.
         for event in pygame.event.get():

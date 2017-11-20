@@ -18,6 +18,9 @@ class MotorBike(pygame.sprite.Sprite):
         self.direction = ""
 
     def move(self):
+        if self.is_out_of_bounds():
+            self.dead = True
+
         if self.direction == "left":
             self.move_left()
         elif self.direction == "up":
@@ -52,5 +55,5 @@ class MotorBike(pygame.sprite.Sprite):
 
     def is_out_of_bounds(self):
         if self.x >= int(self.config.get_value("game", "width")) or self.x <= 0 or self.y >= int(self.config.get_value("game", "height")) or self.y <= 0:
-            self.dead = True
+            return True
 
