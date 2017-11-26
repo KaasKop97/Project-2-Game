@@ -6,7 +6,7 @@ class Race:
         self.game_name = "Race"
         self.author = "Aman"
 
-    def load(self):
+    def load(self, surface):
         # This is the first thing that's called, load stuff here. Must return a boolean!!
         return True
 

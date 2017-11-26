@@ -31,16 +31,16 @@ class GameHandler:
             self.log.write_log("INFO", "GAME: " + self.loaded_game + " loaded.")
             if game_name == "DRON":
                 self.game = DRON.Dron()
-                self.game.load()
+                self.game.load(surface)
             elif game_name == "Zone Trespassers":
                 self.game = self.GT
-                self.game.load()
+                self.game.load(surface)
             elif game_name == "Race":
                 self.game = self.race
-                self.game.load()
+                self.game.load(surface)
             elif game_name == "Dodge the Fangirls":
                 self.game = self.DF
-                self.game.load()
+                self.game.load(surface)
             else:
                 print("Game does not exist")
 

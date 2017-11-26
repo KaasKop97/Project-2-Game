@@ -41,6 +41,7 @@ while not done:
             elif event.type == pygame.KEYDOWN:
                 game_handler.key_input(event.key)
                 if event.key == 27:
+                    # TODO Make dis better idk how but do it.
                     game_handler.unload_game()
                     menu.draw_main_menu(background)
                     break
@@ -66,15 +67,23 @@ while not done:
                     menu.reset(background)
                     game_handler.load_game("DRON", background)
                     game_loaded = True
-                elif menu_selection == "Zone Trespassers":
+                elif menu_selection == "Galaxy Trespassers":
                     menu.reset(background)
-                    game_handler.load_game("Zone Trespassers", background)
+                    game_handler.load_game("Galaxy Trespassers", background)
+                    game_loaded = True
+                elif menu_selection == "Race":
+                    menu.reset(background)
+                    game_handler.load_game("Race", background)
+                    game_loaded = True
+                elif menu_selection == "Dodge the Fangirls":
+                    menu.reset(background)
+                    game_handler.load_game("Dodge the Fangirls", background)
                     game_loaded = True
             elif event.type == pygame.QUIT:
                 logger.write_log("DEBUG", "Quitting...")
                 done = True
     screen.blit(background, (0, 0))
 
-    pygame.display.update()
+    pygame.display.flip()
 
 pygame.quit()

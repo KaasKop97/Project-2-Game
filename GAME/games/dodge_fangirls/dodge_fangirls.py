@@ -6,7 +6,7 @@ class DodgeFangirls:
         self.game_name = "Dodge the Fangirls"
         self.author = "Charone"
 
-    def load(self):
+    def load(self, surface):
         # This is the first thing that's called, load stuff here. Must return a boolean!!
         return True
 

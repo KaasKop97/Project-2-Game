@@ -6,7 +6,7 @@ class ZoneTrespassers:
         self.game_name = "Galaxy Trespassers"
         self.author = "Cherie"
 
-    def load(self):
+    def load(self, surface):
         # This is the first thing that's called, load stuff here. Must return a boolean!!
         return True
 
