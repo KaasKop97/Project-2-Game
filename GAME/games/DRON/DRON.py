@@ -22,7 +22,7 @@ class Dron:
 
     def update(self, surface):
         if self.bike.dead:
-            self.player_dead()
+            self.player_dead(surface)
         self.sprite_group.update()
         self.sprite_group.draw(surface)
 
@@ -35,11 +35,11 @@ class Dron:
         return True
 
     def mousebutton_down(self, surface, position):
-        # I do not need dis for my game
+        # I do not need dis for my game so I pass it
         pass
 
     def mousebutton_up(self, surface, position):
-        # I do not need dis for my game
+        # I do not need dis for my game so I pass it
         pass
 
     def key_input(self, key):
@@ -59,8 +59,9 @@ class Dron:
             self.stop_game()
             print("Should kill the game")
 
-    def player_dead(self):
+    def player_dead(self, surface):
         print("Display a message saying that the user is dead and is able to try again or something")
+        self.misc.draw_text("Inconsolate", 80, "You're dead you idiot.", (255, 0, 0), surface, 50, 50)
 
     def stop_game(self):
         self.misc.stop_music()
