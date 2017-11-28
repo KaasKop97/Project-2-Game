@@ -33,8 +33,11 @@ class MiscHelper:
         else:
             return False
 
-    def draw_text(self, font, size, text, colour, surface, x, y):
-        self.font = pygame.font.SysFont(font, size)
+    def draw_text(self, font, size, text, colour, surface, x, y, sysfont=True):
+        if sysfont:
+            self.font = pygame.font.SysFont(font, size)
+        else:
+            self.font = pygame.font.Font(font, size)
         text = self.font.render(text, 1, (colour))
         surface.blit(text, (x, y))
 

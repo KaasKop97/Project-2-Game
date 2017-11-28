@@ -16,58 +16,51 @@ class MotorBike(pygame.sprite.Sprite):
         self.rect.y += 5
         self.speed = 5
         self.dead = False
-        self.direction = "right"
-        self.rotation_done_for = ""
+        self.direction = 1
+        self.rotation_done_for = 1
 
     def update(self):
         if self.misc.is_out_of_bounds(self.rect):
             self.dead = True
-        if self.direction == "left":
+            self.direction = "none"
+            self.stop_moving()
+            self.misc.stop_music()
+        if self.direction == 3:
             self.move_left()
-        elif self.direction == "up":
+        elif self.direction == 0:
             self.move_up()
-        elif self.direction == "down":
+        elif self.direction == 2:
             self.move_down()
-        else:
+        elif self.direction == 1:
             self.move_right()
         self.log.write_log("DEBUG", "Moving... new values: " + str(self.rect.x) + ", " + str(self.rect.y))
 
     def move_left(self):
-        if self.rotation_done_for == "right":
-            self.image = pygame.transform.rotate(self.image, 180)
-        elif not self.rotation_done_for == "left":
-            self.image = pygame.transform.rotate(self.image, -90)
-
-        self.rotation_done_for = "left"
+        self.rotate(self.rotation_done_for, 3)
+        self.rotation_done_for = 3
         self.rect.move_ip(-self.speed, 0)
 
     def move_up(self):
-        if self.rotation_done_for == "down":
-            self.image = pygame.transform.rotate(self.image, 180)
-        elif not self.rotation_done_for == "up":
-            self.image = pygame.transform.rotate(self.image, -90)
-
-        self.rotation_done_for = "up"
+        self.rotate(self.rotation_done_for, 0)
+        self.rotation_done_for = 0
         self.rect.move_ip(0, -self.speed)
 
     def move_down(self):
-        if self.rotation_done_for == "up":
-            self.image = pygame.transform.rotate(self.image, 180)
-        elif not self.rotation_done_for == "down":
-            self.image = pygame.transform.rotate(self.image, -90)
-
-        self.rotation_done_for = "down"
+        self.rotate(self.rotation_done_for, 2)
+        self.rotation_done_for = 2
         self.rect.move_ip(0, +self.speed)
 
     def move_right(self):
-        # Because this is the default we need to check if it's empty or not
-        if self.rotation_done_for == "left":
-            self.image = pygame.transform.rotate(self.image, 180)
-        elif not self.rotation_done_for == "right":
-            self.image = pygame.transform.rotate(self.image, -90)
-
-        self.rotation_done_for = "right"
+        self.rotate(self.rotation_done_for, 1)
+        self.rotation_done_for = 1
         self.rect.move_ip(+self.speed, 0)
+
+    def stop_moving(self):
+        self.rect.move_ip(0, 0)
+
+    def rotate(self, old_direction, new_direction):
+        rotation = (old_direction - new_direction) * 90
+        self.image = pygame.transform.rotate(self.image, rotation)
 
     def draw_line(self):
         pass
