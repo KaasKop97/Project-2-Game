@@ -1,89 +1,117 @@
 import pygame
 
 from handlers import config_handler, game_handler
-from helpers import menu_helper, settings_helper, log_helper
+from helpers import menu_helper, log_helper, misc_helper
 
-# Creating the objects for the configuration handler, game loading, and menu.
-conf = config_handler.ConfigHandler()
-game_handler = game_handler.GameHandler()
-menu = menu_helper.MenuHelper()
-logger = log_helper.LogHelper()
 
-pygame.init()
+class Main:
+    def __init__(self):
+        self.conf = config_handler.ConfigHandler()
+        self.logger = log_helper.LogHelper()
 
-done = False
+        pygame.init()
 
-# Here we initialize a window for the game itself, in the future we'll check the settings if its fullscreen or not
-screen = pygame.display.set_mode([int(conf.get_value("game", "width")), int(conf.get_value("game", "height"))])
-pygame.display.set_caption(conf.get_value("game", "caption"))
+        self.screen = pygame.display.set_mode(
+            [int(self.conf.get_value("game", "width")), int(self.conf.get_value("game", "height"))])
+        pygame.display.set_caption(self.conf.get_value("game", "caption"))
 
-# This is all pre-game loading so here we just set the surface to the correct screen size and set it to an
-# background colour
-# The clock creates an object to help track time
-clock = pygame.time.Clock()
-background = pygame.Surface(screen.get_size())
-background = background.convert(background)
+        self.running = True
+        self.game_loaded = False
+        self.background = pygame.Surface(self.screen.get_size())
+        self.background = self.background.convert(self.background)
+        self.bg_rect = self.background.get_rect()
+        self.clock = pygame.time.Clock()
 
-menu.draw_main_menu(background)
+        self.misc = misc_helper.MiscHelper()
+        self.menu = menu_helper.MenuHelper(self.background)
+        self.game_handler = game_handler.GameHandler(self.background)
 
-# Everything in this while loop is called once per frame. So be careful!
-while not done:
-    # Limit the fps and resources used to 60 times a second
-    clock.tick(60)
+    def main_loop(self):
+        self.menu.draw_menu("main")
+        while self.running:
+            self.clock.tick(60)
 
-    if game_handler.loaded_game is not None:
-        game_handler.main_loop()
-        for event in pygame.event.get():
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                game_handler.mousebutton_down(event.pos)
-            elif event.type == pygame.MOUSEBUTTONUP:
-                game_handler.mousebutton_up(event.pos)
-            elif event.type == pygame.KEYDOWN:
-                game_handler.key_input(event.key)
-                if event.key == 27:
-                    # TODO Make dis better idk how but do it.
-                    game_handler.unload_game()
-                    menu.draw_main_menu(background)
-                    break
-            elif event.type == pygame.QUIT:
-                done = True
-    else:
-        # This pretty much means that we're in the main menu.
-        for event in pygame.event.get():
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                menu_selection = menu.button_pressed(event.pos)
-                logger.write_log("DEBUG", "Button pressed: " + str(menu_selection))
+            if not self.game_handler.loaded_game:
+                for event in pygame.event.get():
+                    if event.type == pygame.MOUSEBUTTONDOWN:
+                        button_pressed = self.menu.get_button_pressed(event.pos)
+                        if not button_pressed == self.menu.currently_drawn:
+                            if button_pressed == "PLAY":
+                                self.menu.draw_menu("PLAY")
+                            elif button_pressed == "DRON":
+                                self.game_handler.load_game("DRON")
+                            elif button_pressed == "QUIT":
+                                self.running = False
+                                pygame.quit()
+                            else:
+                                print("ERROR: Can't load button since there is no definition for it.")
+                    elif event.type == pygame.QUIT:
+                        print("Quitting")
+                        self.running = False
+            else:
+                self.menu.reset_menu()
+                self.game_handler.main_loop()
+                for event in pygame.event.get():
+                    if event.type == pygame.MOUSEBUTTONDOWN:
+                        self.game_handler.mousebutton_down(event.pos)
+                    elif event.type == pygame.MOUSEBUTTONUP:
+                        self.game_handler.mousebutton_up(event.pos)
+                    elif event.type == pygame.KEYDOWN:
+                        self.game_handler.key_down(event.key)
+                        if event.key == 27:
+                            self.game_handler.unload_game()
+                            self.menu.draw_menu("main")
+                    elif event.type == pygame.KEYUP:
+                        self.game_handler.key_up(event.key)
+                    elif event.type == pygame.QUIT:
+                        print("Quitting")
+                        self.running = False
 
-                # TODO: make an if statement for all menu selections
-                if menu_selection == "PLAY":
-                    menu.draw_game_selection(background)
-                elif menu_selection == "QUIT GAME":
-                    # TODO: make a confirmation message "Do you really wanna quit"
-                    done = True
-                elif menu_selection == "BACK":
-                    # Should save somewhere where we came from and then return to that.
-                    menu.go_back(background)
-                elif menu_selection == "DRON":
-                    menu.reset(background)
-                    game_handler.load_game("DRON", background)
-                    game_loaded = True
-                elif menu_selection == "Galaxy Trespassers":
-                    menu.reset(background)
-                    game_handler.load_game("Galaxy Trespassers", background)
-                    game_loaded = True
-                elif menu_selection == "Race":
-                    menu.reset(background)
-                    game_handler.load_game("Race", background)
-                    game_loaded = True
-                elif menu_selection == "Dodge the Fangirls":
-                    menu.reset(background)
-                    game_handler.load_game("Dodge the Fangirls", background)
-                    game_loaded = True
-            elif event.type == pygame.QUIT:
-                logger.write_log("DEBUG", "Quitting...")
-                done = True
-    screen.blit(background, (0, 0))
+            self.screen.blit(self.background, (0, 0))
+            pygame.display.update()
 
-    pygame.display.flip()
+game = Main()
+game.main_loop()
 
-pygame.quit()
+#
+#     else:
+#         # This pretty much means that we're in the main menu.
+#         for event in pygame.event.get():
+#             if event.type == pygame.MOUSEBUTTONDOWN:
+#                 menu_selection = menu.button_pressed(event.pos)
+#                 logger.write_log("DEBUG", "Button pressed: " + str(menu_selection))
+#
+#                 # TODO: make an if statement for all menu selections
+#                 if menu_selection == "PLAY":
+#                     menu.draw_game_selection(background)
+#                 elif menu_selection == "QUIT GAME":
+#                     # TODO: make a confirmation message "Do you really wanna quit"
+#                     done = True
+#                 elif menu_selection == "BACK":
+#                     # Should save somewhere where we came from and then return to that.
+#                     menu.go_back(background)
+#                 elif menu_selection == "DRON":
+#                     menu.reset(background)
+#                     game_handler.load_game("DRON", background)
+#                     game_loaded = True
+#                 elif menu_selection == "Galaxy Trespassers":
+#                     menu.reset(background)
+#                     game_handler.load_game("Galaxy Trespassers", background)
+#                     game_loaded = True
+#                 elif menu_selection == "Race":
+#                     menu.reset(background)
+#                     game_handler.load_game("Race", background)
+#                     game_loaded = True
+#                 elif menu_selection == "Dodge the Fangirls":
+#                     menu.reset(background)
+#                     game_handler.load_game("Dodge the Fangirls", background)
+#                     game_loaded = True
+#             elif event.type == pygame.QUIT:
+#                 logger.write_log("DEBUG", "Quitting...")
+#                 done = True
+#     misc.draw_text("Inconsolata", 20, str(clock.get_fps()), (255, 0, 0), background, 1350, 0)
+#     screen.blit(background, (0, 0))
+#
+#     pygame.display.flip()
+#
+# pygame.quit()
