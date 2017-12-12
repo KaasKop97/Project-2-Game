@@ -1,5 +1,5 @@
 from games.DRON import DRON
-from games.Galaxy_Trespassers import Galaxy_Trespassers
+#from games.Galaxy_Trespassers import Galaxy_Trespassers
 from games.race import race
 from games.dodge_fangirls import dodge_fangirls
 from helpers import log_helper
@@ -13,13 +13,13 @@ class GameHandler:
 
         self.log = log_helper.LogHelper()
         self.DRON = DRON.Dron(self.surface)
-        self.GT = Galaxy_Trespassers.ZoneTrespassers()
+        #self.GT = Galaxy_Trespassers.ZoneTrespassers()
         self.race = race.Race()
         self.DF = dodge_fangirls.DodgeFangirls()
 
         self.game_names = [
             self.DRON.game_name,
-            self.GT.game_name,
+            #self.GT.game_name,
             self.race.game_name,
             self.DF.game_name
         ]
@@ -31,7 +31,7 @@ class GameHandler:
             self.log.write_log("INFO", "GAME: " + self.loaded_game + " loaded.")
             if game_name == "DRON":
                 self.game = DRON.Dron(self.surface)
-                self.game.load(self.surface)
+                self.game.load()
             elif game_name == "Zone Trespassers":
                 self.game = self.GT
                 self.game.load(self.surface)

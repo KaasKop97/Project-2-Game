@@ -1,5 +1,6 @@
 import pygame
 import os
+import random
 
 from games.DRON.MotorBike import MotorBike
 from helpers import misc_helper, log_helper
@@ -14,20 +15,24 @@ class Dron:
         self.misc = misc_helper.MiscHelper()
         self.log = log_helper.LogHelper()
 
-        self.bike = MotorBike()
+        self.bike = MotorBike((10, 10), -90, (255, 0, 0), 1, self.surface)
+        self.opponent = MotorBike((500, 500), 90, (0, 255, 0), 3, self.surface)
 
         self.sprite_group = pygame.sprite.Group()
-        self.sprite_group.add(self.bike)
+        self.sprite_group.add(self.bike, self.opponent)
 
     def update(self):
         if self.bike.dead:
-            self.player_dead(self.surface)
+            self.player_dead()
+        elif self.opponent.dead:
+            self.victory()
         # Somehow need to fix being able to draw the background every frame without lag.
         # Or remove the last position of the sprite with something?
+        self.handle_cpu_players()
         self.sprite_group.update()
         self.sprite_group.draw(self.surface)
 
-    def load(self, surface):
+    def load(self):
         try:
             #self.misc.set_background(surface, os.path.abspath("games/DRON/data/floor.png"))
             self.misc.play_music(os.path.abspath("games/DRON/data/music.ogg"))
@@ -67,15 +72,19 @@ class Dron:
         pass
 
     def handle_cpu_players(self):
-        pass
+        if random.randint(0, 100) > 95:
+            self.opponent.direction = random.randint(0, 3)
 
-    def player_dead(self, surface):
-        self.misc.draw_text("Inconsolate", 80, "You're dead, press R to retry.", (255, 0, 0), surface, 50, 50)
+    def victory(self):
+        self.misc.draw_text("Inconsolate", 80, "You've won!", (255, 0, 0), self.surface, 50, 50)
+
+    def player_dead(self):
+        self.misc.draw_text("Inconsolate", 80, "You're dead, press R to retry.", (255, 0, 0), self.surface, 50, 50)
 
     def restart_game(self):
         self.misc.stop_music()
         self.__init__(self.surface)
-        self.load(self.surface)
+        self.load()
 
     def stop_game(self):
         self.misc.stop_music()
