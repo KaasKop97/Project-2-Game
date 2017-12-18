@@ -2,7 +2,6 @@ import pygame
 import os
 from helpers import log_helper, misc_helper
 from handlers import config_handler
-import random
 
 
 class MotorBike(pygame.sprite.Sprite):
@@ -13,6 +12,7 @@ class MotorBike(pygame.sprite.Sprite):
         self.misc = misc_helper.MiscHelper()
         self.image, self.rect = self.misc.load_image(os.path.join(os.getcwd(), "games/DRON/data/motorbike.png"))
         self.image = pygame.transform.rotate(self.image, init_rot)
+        self.rect = self.image.get_rect()
         self.colour = bike_colour
         self.surface = surface
 
@@ -45,62 +45,43 @@ class MotorBike(pygame.sprite.Sprite):
         self.log.write_log("DEBUG", "Moving... new values: " + str(self.rect.x) + ", " + str(self.rect.y))
 
     def move_left(self):
-        if self.rotation_done_for == 3:
-            self.rect.move_ip(-self.speed, 0)
-        else:
-            self.rotate(self.rotation_done_for, 3)
-            self.rotation_done_for = 3
-
+        self.rotate(self.rotation_done_for, 3)
+        self.rotation_done_for = 3
+        self.rect.move_ip(-self.speed, 0)
 
     def move_up(self):
-        if self.rotation_done_for == 0:
-            self.rect.move_ip(0, -self.speed)
-        else:
-            self.rotate(self.rotation_done_for, 0)
-            self.rotation_done_for = 0
-
+        self.rotate(self.rotation_done_for, 0)
+        self.rotation_done_for = 0
+        self.rect.move_ip(0, -self.speed)
 
     def move_down(self):
-        if self.rotation_done_for == 2:
-            self.rect.move_ip(0, +self.speed)
-        else:
-            self.rotate(self.rotation_done_for, 2)
-            self.rotation_done_for = 2
-
+        self.rotate(self.rotation_done_for, 2)
+        self.rotation_done_for = 2
+        self.rect.move_ip(0, +self.speed)
 
     def move_right(self):
-        if self.rotation_done_for == 1:
-            self.rect.move_ip(+self.speed, 0)
-        else:
-            self.rotate(self.rotation_done_for, 1)
-            self.rotation_done_for = 1
-
-    def move(self, old_dir, new_dir):
-        self.rotate(old_dir, new_dir)
-        if self.rotation_done_for == 0:
-            self.rect.move_ip(0, -self.speed)
-        elif self.rotation_done_for == 1:
-            self.rect.move_ip(+self.speed, 0)
-        elif self.rotation_done_for == 2:
-            self.rect
-
+        self.rotate(self.rotation_done_for, 1)
+        self.rotation_done_for = 1
+        self.rect.move_ip(+self.speed, 0)
 
     def stop_moving(self):
         self.rect.move_ip(0, 0)
 
     def rotate(self, old_direction, new_direction):
+        old_values = ()
         rotation = (old_direction - new_direction) * 90
         self.image = pygame.transform.rotate(self.image, rotation)
 
     def handle_line(self):
         if self.direction == 1:
-            self.drawn_line.append((self.rect.x - self.rect.width, self.rect.y, self.rect.width, self.rect.height))
+            self.drawn_line.append((self.rect.x - self.rect.width // 2, self.rect.y, self.rect.width, self.rect.height))
         elif self.direction == 0:
-            self.drawn_line.append((self.rect.x, self.rect.y + self.rect.height, self.rect.width, self.rect.height))
+            self.drawn_line.append((self.rect.x, self.rect.y + self.rect.height // 2, self.rect.width, self.rect.height))
         elif self.direction == 2:
             self.drawn_line.append((self.rect.x, self.rect.y - self.rect.height, self.rect.width, self.rect.height))
         elif self.direction == 3:
             self.drawn_line.append((self.rect.x + self.rect.width, self.rect.y, self.rect.width, self.rect.height))
+
         for x in range(len(self.drawn_line)):
             if self.rect.collidepoint(self.drawn_line[x][0], self.drawn_line[x][1]):
                 print("Die pls.")
