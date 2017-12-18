@@ -1,5 +1,4 @@
-# Project 2 game
-For project 2 we need to make some sort of game.
+# Project 2 gamesome sort of game.
 
 ## Getting started
 You'll need:
@@ -23,3 +22,5 @@ pipenv shell
 ```
 
 This will initialize and install the needed modules to make this project run.
+
+For project 2 we need to make a game.
