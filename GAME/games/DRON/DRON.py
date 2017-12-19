@@ -1,9 +1,9 @@
 import pygame
-import os
 import random
 
 from games.DRON.MotorBike import MotorBike
 from helpers import misc_helper, log_helper
+from handlers import config_handler
 
 
 class Dron:
@@ -11,15 +11,16 @@ class Dron:
         self.game_name = "DRON"
         self.game_author = "Mitchel van Hamburg"
 
+        self.conf = config_handler.ConfigHandler()
+        self.game_width = int(self.conf.get_value("game", "width"))
+        self.game_height = int(self.conf.get_value("game", "height"))
+
         self.surface = surface
         self.misc = misc_helper.MiscHelper()
         self.log = log_helper.LogHelper()
 
-        #self.bike = MotorBike((10, 10), -90, (255, 0, 0), 1, self.surface)
-        #self.opponent = MotorBike((500, 500), 90, (0, 255, 0), 3, self.surface)
-        self.bike = MotorBike((20, 20), 1, (255, 0, 0), 1, self.surface)
-        self.opponent = MotorBike((500, 500), 1, (255, 0, 0), 3, self.surface)
-
+        self.bike = MotorBike((20, 20), 1, (255, 0, 0), self.surface)
+        self.opponent = MotorBike((500, 500), 1, (0, 255, 0), self.surface)
 
         self.sprite_group = pygame.sprite.Group()
         self.sprite_group.add(self.bike, self.opponent)
@@ -31,13 +32,15 @@ class Dron:
             self.victory()
         # Somehow need to fix being able to draw the background every frame without lag.
         # Or remove the last position of the sprite with something?
-        self.handle_cpu_players()
+        if not self.bike.dead or self.opponent.dead:
+            self.handle_cpu_players()
+
         self.sprite_group.update()
         self.sprite_group.draw(self.surface)
 
     def load(self):
         # try:
-        #     #self.misc.set_background(surface, os.path.abspath("games/DRON/data/floor.png"))
+        #     self.misc.set_background(surface, os.path.abspath("games/DRON/data/floor.png"))
         #     self.misc.play_music(os.path.abspath("games/DRON/data/music.ogg"))
         # except pygame.error as e:
         #     self.log.write_log("ERROR", "Something died fix it you idiot: " + str(e))
@@ -69,7 +72,7 @@ class Dron:
         elif key == 27:
             self.stop_game()
             print("Should kill the game")
-        elif key == 114 and self.bike.dead:
+        elif key == 114 and self.bike.dead or self.opponent.dead:
             self.restart_game()
 
     def key_up(self, key):
@@ -80,16 +83,15 @@ class Dron:
         if random.randint(0, 100) > 95:
             self.opponent.direction = random.randint(0, 3)
 
-    def line_thingy(self):
-        player_line = self.bike.drawn_line
-        cpu_line = self.opponent.drawn_line
-
-
     def victory(self):
-        self.misc.draw_text("Inconsolate", 80, "You've won!", (255, 0, 0), self.surface, 50, 50)
+        self.bike.direction = 4
+        self.opponent.direction = 4
+        self.misc.draw_text("Inconsolate", 80, "You've won! Press R to retry", (255, 0, 0), self.surface, 50, 50)
 
     def player_dead(self):
-        self.misc.draw_text("Inconsolate", 80, "You're dead, press R to retry.", (255, 0, 0), self.surface, 50, 50)
+        self.bike.direction = 4
+        self.opponent.direction = 4
+        self.misc.draw_text("Inconsolate", 80, "You're dead! Press R to retry.", (255, 0, 0), self.surface, 50, 50)
 
     def restart_game(self):
         self.misc.stop_music()
