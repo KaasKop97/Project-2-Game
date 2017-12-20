@@ -26,10 +26,10 @@ class Dron:
         self.sprite_group.add(self.bike, self.opponent)
 
     def update(self):
-        if self.bike.dead:
-            self.player_dead()
-        elif self.opponent.dead:
-            self.victory()
+        # if self.bike.dead:
+        #     self.player_dead()
+        # elif self.opponent.dead:
+        #     self.victory()
         # Somehow need to fix being able to draw the background every frame without lag.
         # Or remove the last position of the sprite with something?
         if not self.bike.dead or self.opponent.dead:

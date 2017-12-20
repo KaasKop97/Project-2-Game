@@ -54,15 +54,16 @@ class MotorBike(pygame.sprite.Sprite):
         self.rect.y = old_location[1]
 
     def handle_line(self):
-        self.line.append((self.rect.x, self.rect.y))
-        # if self.direction == 0:
-        #     self.line.append(self.rect.midbottom)
-        # elif self.direction == 1:
-        #     self.line.append(self.rect.midleft)
-        # elif self.direction == 2:
-        #     self.line.append(self.rect.midtop)
-        # elif self.direction == 3:
-        #     self.line.append(self.rect.midright)
+        if self.direction == 0:
+            self.line.append((self.rect.x + 8, self.rect.y + 5, 10, 10, self.rect.midtop))
+        elif self.direction == 1:
+            self.line.append((self.rect.x, self.rect.y + 8, 10, 10, self.rect.midright))
+        elif self.direction == 2:
+            self.line.append((self.rect.x + 8, self.rect.y, 10, 10, self.rect.midbottom))
+        elif self.direction == 3:
+            self.line.append((self.rect.x + 5, self.rect.y + 8, 10, 10, self.rect.midleft))
 
         for x in range(len(self.line)):
-            pygame.draw.rect(self.surface, self.colour, (self.line[x][0], self.line[x][1], 10, 10))
+            if self.rect.collidepoint(self.line[x][4]):
+                print("Woopsie")
+            pygame.draw.rect(self.surface, self.colour, (self.line[x][0], self.line[x][1], self.line[x][2], self.line[x][3]))
