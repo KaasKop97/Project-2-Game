@@ -1,11 +1,20 @@
-import pygame
 from handlers import config_handler
 
-#TODO: Back functionality
+from helpers import misc_helper
+
+import pygame
+
+
+# TODO: Back functionality
 class MenuHelper:
     def __init__(self, surface):
         self.main_menu_items = ["PLAY", "SETTINGS", "CREDITS", "QUIT"]
-        self.game_names = ["DRON", "Galaxy Trespasser", "Race", "Dodge the fangirls"]
+        self.game_names = [
+            "DRON",
+            "Galaxy Trespasser",
+            "Race",
+            "Dodge the fangirls"
+        ]
         self.rectangles = {}
         self.currently_drawn = ""
 
@@ -14,9 +23,11 @@ class MenuHelper:
 
         self.surface = surface
         self.conf = config_handler.ConfigHandler()
+        self.misc = misc_helper.MiscHelper()
 
     def create_button(self, text, x, y, width, height, text_colour, rect_colour=(66, 66, 66)):
-        rect = pygame.draw.rect(self.surface, rect_colour, (x, y, width, height))
+        rect = pygame.draw.rect(
+            self.surface, rect_colour, (x, y, width, height))
         label = self.font.render(text, 1, text_colour)
 
         self.rectangles[text] = rect
@@ -38,9 +49,10 @@ class MenuHelper:
 
         if menu_name == "main":
             for i in range(len(self.main_menu_items)):
-                self.create_button(self.main_menu_items[i], int(self.conf.get_value("game", "width")) // 2 - 55,
-                                   10 + (40 * i), 85, 30, (255, 255, 255))
+                self.create_button(self.main_menu_items[i], int(self.conf.get_value("game", "width")) // 2 - 55, 10 + (40 * i), 85, 30, (255, 255, 255))
             self.currently_drawn = "main"
+            # TODO:
+            # self.misc.play_music("")
         elif menu_name == "PLAY":
             for i in range(len(self.game_names)):
                 self.create_button(self.game_names[i], int(self.conf.get_value("game", "width")) // 2 - 55,
@@ -50,4 +62,3 @@ class MenuHelper:
     def reset_menu(self):
         self.surface.fill((0, 0, 0))
         self.rectangles.clear()
-

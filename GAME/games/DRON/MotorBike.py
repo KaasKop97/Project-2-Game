@@ -19,8 +19,10 @@ class MotorBike(pygame.sprite.Sprite):
         self.speed = 4
         self.colour = bike_colour
         self.dead = False
-        self.line = []
 
+        self.line = [(self.rect.x, self.rect.y, 10, 10)]
+        # Because the original direction is 1 we need to append 15 so that the player doesnt die in 1sec kek
+        self.hitbox = (self.rect.x + 15, self.rect.y, 2, 2)
         self.rotate(0, init_direction)
 
     def update(self):
@@ -39,8 +41,8 @@ class MotorBike(pygame.sprite.Sprite):
         elif self.direction == 3:
             self.rect.move_ip(-self.speed, 0)
         elif self.direction == 4:
+            # direction 4 is stop the vehicle
             self.rect.move_ip(0, 0)
-
         self.handle_line()
 
     def rotate(self, old_direction, new_direction):
@@ -54,16 +56,21 @@ class MotorBike(pygame.sprite.Sprite):
         self.rect.y = old_location[1]
 
     def handle_line(self):
-        if self.direction == 0:
-            self.line.append((self.rect.x + 8, self.rect.y + 5, 10, 10, self.rect.midtop))
-        elif self.direction == 1:
-            self.line.append((self.rect.x, self.rect.y + 8, 10, 10, self.rect.midright))
-        elif self.direction == 2:
-            self.line.append((self.rect.x + 8, self.rect.y, 10, 10, self.rect.midbottom))
-        elif self.direction == 3:
-            self.line.append((self.rect.x + 5, self.rect.y + 8, 10, 10, self.rect.midleft))
+        if not self.line[-1] == self.rect:
+            self.line.append((self.rect.x, self.rect.y, 10, 10))
+            
+            if self.direction == 0:
+                self.hitbox = (self.rect.x, self.rect.y - self.rect.height // 2, 10, 2)
+            elif self.direction == 1:
+                self.hitbox = (self.rect.x + self.rect.width + 5, self.rect.y, 2, 10)
+            elif self.direction == 2:
+                self.hitbox = (self.rect.x, self.rect.y + 15, 10, 2)
+            elif self.direction == 3:
+                self.hitbox = (self.rect.x - 5, self.rect.y, 2, 10)
 
         for x in range(len(self.line)):
-            if self.rect.collidepoint(self.line[x][4]):
-                print("Woopsie")
             pygame.draw.rect(self.surface, self.colour, (self.line[x][0], self.line[x][1], self.line[x][2], self.line[x][3]))
+            
+        # DEBUG PURPOSES draw the hitbox
+        for x in range(len(self.hitbox)):
+            pygame.draw.rect(self.surface, (0, 255, 0), (self.hitbox[0], self.hitbox[1], self.hitbox[2], self.hitbox[3]))

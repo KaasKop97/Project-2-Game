@@ -30,7 +30,6 @@ class Main:
         self.menu.draw_menu("main")
         while self.running:
             self.clock.tick(60)
-
             if not self.game_handler.loaded_game:
                 for event in pygame.event.get():
                     if event.type == pygame.MOUSEBUTTONDOWN:
