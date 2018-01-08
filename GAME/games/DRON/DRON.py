@@ -6,7 +6,7 @@ from games.DRON.MotorBike import MotorBike
 from helpers import misc_helper, log_helper
 from handlers import config_handler
 
-# kek
+
 class Dron:
     def __init__(self, surface):
         self.game_name = "DRON"
@@ -39,12 +39,12 @@ class Dron:
         self.sprite_group.draw(self.surface)
 
     def load(self):
-        try:
-            #self.misc.set_background(surface, os.path.abspath("games/DRON/data/floor.png"))
-            self.misc.play_music(os.path.abspath("games/DRON/data/music.ogg"))
-        except pygame.error as e:
-            self.log.write_log("ERROR", "Something died fix it you idiot: " + str(e))
-            return False
+        # try:
+        #     #self.misc.set_background(surface, os.path.abspath("games/DRON/data/floor.png"))
+        #     self.misc.play_music(os.path.abspath("games/DRON/data/music.ogg"))
+        # except pygame.error as e:
+        #     self.log.write_log("ERROR", "Something died fix it you idiot: " + str(e))
+        #     return False
         return True
 
     def mousebutton_down(self, surface, position):
@@ -71,7 +71,7 @@ class Dron:
         elif key == 27:
             self.stop_game()
             print("Should kill the game")
-        elif key == 114 and self.bike.dead or self.opponent.dead:
+        elif key == 114 or self.bike.dead or self.opponent.dead:
             self.restart_game()
 
     def key_up(self, key):
@@ -79,7 +79,7 @@ class Dron:
 
     def handle_cpu_players(self):
         # http://zulko.github.io/easyAI/get_started.html
-        if random.randint(0, 1000) > 995:
+        if random.randint(0, 1000) > 950:
             self.opponent.direction = random.randint(0, 3)
 
     def handle_line_thing(self):

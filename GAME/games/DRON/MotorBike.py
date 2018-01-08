@@ -20,29 +20,34 @@ class MotorBike(pygame.sprite.Sprite):
         self.colour = bike_colour
         self.dead = False
 
+        self.direction_changed = 0
+
         self.line = [(self.rect.x, self.rect.y, 10, 10)]
         # Because the original direction is 1 we need to append 15 so that the player doesnt die in 1sec kek
         self.hitbox = (self.rect.x + 15, self.rect.y, 2, 2)
         self.rotate(0, init_direction)
 
     def update(self):
-        if not self.rotation_done_for == self.direction:
-            self.rotate(self.rotation_done_for, self.direction)
-
         if self.misc.is_out_of_bounds(self.rect):
             self.dead = True
 
-        if self.direction == 0:
+        if self.direction == 0 and not self.direction_changed == 2:
             self.rect.move_ip(0, -self.speed)
-        elif self.direction == 1:
+            self.direction_changed = 0
+        elif self.direction == 1 and not self.direction_changed == 3:
             self.rect.move_ip(+self.speed, 0)
-        elif self.direction == 2:
+            self.direction_changed = 1
+        elif self.direction == 2 and not self.direction_changed == 0:
             self.rect.move_ip(0, +self.speed)
-        elif self.direction == 3:
+            self.direction_changed = 2
+        elif self.direction == 3 and not self.direction_changed == 1:
             self.rect.move_ip(-self.speed, 0)
+            self.direction_changed = 3
         elif self.direction == 4:
-            # direction 4 is stop the vehicle
+            # direction 4 is to stop the vehicle
             self.rect.move_ip(0, 0)
+        else:
+            self.direction = self.direction_changed
         self.handle_line()
 
     def rotate(self, old_direction, new_direction):
@@ -70,7 +75,3 @@ class MotorBike(pygame.sprite.Sprite):
 
         for x in range(len(self.line)):
             pygame.draw.rect(self.surface, self.colour, (self.line[x][0], self.line[x][1], self.line[x][2], self.line[x][3]))
-            
-        # DEBUG PURPOSES draw the hitbox
-        for x in range(len(self.hitbox)):
-            pygame.draw.rect(self.surface, (0, 255, 0), (self.hitbox[0], self.hitbox[1], self.hitbox[2], self.hitbox[3]))
