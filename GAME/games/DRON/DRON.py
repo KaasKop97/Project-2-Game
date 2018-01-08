@@ -6,7 +6,7 @@ from games.DRON.MotorBike import MotorBike
 from helpers import misc_helper, log_helper
 from handlers import config_handler
 
-
+# kek
 class Dron:
     def __init__(self, surface):
         self.game_name = "DRON"
