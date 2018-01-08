@@ -7,7 +7,7 @@ from os import path
 pygame.mixer.pre_init(44100,-16,1,512)
 pygame.init()
 clock       = pygame.time.Clock()
-game_folder = os.path.dirname(os.path.abspath(__file__))#"C:\Users\Cherie\Desktop\game files")
+game_folder = os.path.dirname(os.path.abspath(__file__)) + '\data'#"C:\Users\Cherie\Desktop\game files")
 
 
 #....................................CONSTANTS....................................#
@@ -26,7 +26,7 @@ pygame.display.set_caption("Galaxy Trespassers")
 background      = pygame.image.load(os.path.join(game_folder, 'bg1.png')).convert()
 background_rect = background.get_rect()
     #   PLAY MUSIC  #
-pygame.mixer.music.load("Galaxy trespassers.wav")
+pygame.mixer.music.load((os.path.join(game_folder, "Galaxy trespassers.wav")))
 pygame.mixer.music.set_volume(0.5)#0.5
 pygame.mixer.music.play(-1)
 
@@ -41,18 +41,18 @@ PINK    = (255, 102, 102)
 
 
    #   ENEMY   #
-ENEMY            = pygame.image.load('enemy ship.png')
+ENEMY            = pygame.image.load(os.path.join(game_folder, 'enemy ship.png')).convert()
 #ENEMY_TOP       = DISPLAY.get_height() - ENEMY.get_height()
 #ENEMY_MID       = DISPLAY.get_width()/2 - ENEMY.get_width()/2
 
 
     #   PLAYER  #
-SHIP            = pygame.image.load('aircraft zone trespassers.png')
+SHIP            = pygame.image.load(os.path.join(game_folder, 'aircraft zone trespassers.png')).convert()
 SHIP_TOP        = WINDOW.get_height() - SHIP.get_height()
 SHIP_MID        = WINDOW.get_width()/2 - SHIP.get_width()/2
 
     #   BULLET  #
-BULLET        = pygame.image.load('bullet.png')
+BULLET        = pygame.image.load(os.path.join(game_folder, 'bullet.png')).convert()
 BULLET_HEIGHT = BULLET.get_height()
 BULLET_WIDTH  = BULLET.get_width()
 
@@ -129,7 +129,7 @@ class Player(pygame.sprite.Sprite):
             bullets.add(bullet)
             random.choice(lazer_sounds).play()
 
-
+#..................................ENEMY CLASSES..................................#
 class Enemy(pygame.sprite.Sprite):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
@@ -195,6 +195,7 @@ class Enemy2(pygame.sprite.Sprite):
         if self.rect.top < 20:
                 running = False
 
+    #   class enemy 3
 class Enemy3(pygame.sprite.Sprite):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
@@ -253,43 +254,8 @@ class Explosion(pygame.sprite.Sprite):
 
 
 
-    ###     ATRIBUTES       ###
 
-
-def text_objects(text,font):
-    textSurface = font.render(text, True, WHITE)
-    return textSurface, textSurface.get_rect()
-def message_display(text):
-    largeText = pygame.font.Font('freesansbold.ttf',70)
-    TextSurf, TextRect = text_objects(text, largeText)
-    TextRect.center = ((WIDTH/2),(HEIGHT/2))
-    WINDOW.blit(TextSurf, TextRect)
-
-    pygame.WINDOW.update()
-    time.sleep(2)
-    game_loop()
-
-def dead():
-    #draw_text()
-    game_menu()
-
-#...................................SOUND LOADS...................................#
-
-lazer_shoot     = pygame.mixer.Sound('Laser_Shoot3.wav')
-lazer_shoot2    = pygame.mixer.Sound('lazer_3.wav')
-explosion       = pygame.mixer.Sound('Laser_Gun_Sound_Effect_1_.wav')
-YEET            = pygame.mixer.Sound('YEET.wav')
-yeah_BOI        = pygame.mixer.Sound('My_Longest_Yeah_Boy_Ever_-_Sound_Effect_HD_.wav')
-
-#lazr sounds
-lazer_sounds = []
-for laz in ['Laser_Shoot3.wav', 'pew.wav']:
-    lazer_sounds.append(pygame.mixer.Sound(path.join(game_folder, laz)))
-
-#explosion sounds
-explosion_sounds = []
-for sound in ['Laser_Gun_Sound_Effect_1_.wav', 'lazer_3.wav']:
-    explosion_sounds.append(pygame.mixer.Sound(path.join(game_folder, sound)))
+#...................................DEFINITIONS...................................#
 
 def game_menu():
     WINDOW.blit(background, background_rect)
@@ -311,6 +277,30 @@ def game_menu():
             elif event.type == pygame.KEYUP:
                 waiting = False
                 running = True
+
+
+def dead():
+    #draw_text()
+    game_menu()
+
+#...................................SOUND LOADS...................................#
+
+lazer_shoot     = pygame.mixer.Sound(os.path.join(game_folder, 'Laser_Shoot3.wav'))
+lazer_shoot2    = pygame.mixer.Sound(os.path.join(game_folder, 'lazer_3.wav'))
+explosion       = pygame.mixer.Sound(os.path.join(game_folder, 'Laser_Gun_Sound_Effect_1_.wav'))
+YEET            = pygame.mixer.Sound(os.path.join(game_folder, 'YEET.wav'))
+yeah_BOI        = pygame.mixer.Sound(os.path.join(game_folder, 'My_Longest_Yeah_Boy_Ever_-_Sound_Effect_HD_.wav'))
+
+#lazr sounds
+lazer_sounds = []
+for laz in ['Laser_Shoot3.wav', 'pew.wav']:
+    lazer_sounds.append(pygame.mixer.Sound(path.join(game_folder, laz)))
+
+#explosion sounds
+explosion_sounds = []
+for sound in ['Laser_Gun_Sound_Effect_1_.wav', 'lazer_3.wav']:
+    explosion_sounds.append(pygame.mixer.Sound(path.join(game_folder, sound)))
+
 
 
 #....................................GAME LOOP....................................#
