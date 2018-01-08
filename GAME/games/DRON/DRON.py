@@ -79,7 +79,7 @@ class Dron:
 
     def handle_cpu_players(self):
         # http://zulko.github.io/easyAI/get_started.html
-        if random.randint(0, 100) > 95:
+        if random.randint(0, 1000) > 995:
             self.opponent.direction = random.randint(0, 3)
 
     def handle_line_thing(self):
