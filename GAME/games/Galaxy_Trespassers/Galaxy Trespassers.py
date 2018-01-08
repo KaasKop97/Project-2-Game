@@ -1,13 +1,12 @@
 import  pygame, sys, time, random, pygame.mixer, os, math
 from os import path
 
-#img_dir = path.join(path,dirname(__file__),'img')
 
 #............................INITIALIZATIONS AND CLOCK............................#
 pygame.mixer.pre_init(44100,-16,1,512)
 pygame.init()
 clock       = pygame.time.Clock()
-game_folder = os.path.dirname(os.path.abspath(__file__)) + '\data'#"C:\Users\Cherie\Desktop\game files")
+game_folder = game_folder = os.path.abspath("data/")
 
 
 #....................................CONSTANTS....................................#
@@ -42,9 +41,6 @@ PINK    = (255, 102, 102)
 
    #   ENEMY   #
 ENEMY            = pygame.image.load(os.path.join(game_folder, 'enemy ship.png')).convert()
-#ENEMY_TOP       = DISPLAY.get_height() - ENEMY.get_height()
-#ENEMY_MID       = DISPLAY.get_width()/2 - ENEMY.get_width()/2
-
 
     #   PLAYER  #
 SHIP            = pygame.image.load(os.path.join(game_folder, 'aircraft zone trespassers.png')).convert()
@@ -65,9 +61,6 @@ def draw_text(surf, text, size, x, y):
     text_rect.midtop = (x, y)
     surf.blit(text_surface, text_rect)
 
-#def dead():
-    #draw_text(WINDOW'YOU DIED')
-#im$#g_folder = os.path.join(game_folder, "imagefolder_name")
 
 
 #.....................................CLASSES.....................................#
