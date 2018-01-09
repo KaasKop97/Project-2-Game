@@ -225,6 +225,14 @@ class Bullet(pygame.sprite.Sprite):
         if self.rect.bottom < 0:
             self.kill()
 
+class Wall(pygame.sprite.Sprite):
+    def __init__(self):
+        pygame.sprite.Sprite.__init__(self)
+        self.image = pygame.image.load(os.path.join(game_folder, 'WAll.png')).convert()
+        self.image.set_colorkey(BLACK)
+        self.rect = self.image.get_rect()
+        self.rect.centerx = WINDOW.get_width() / 2
+        self.rect.bottom = HEIGHT
 
     #   class explosion
 class Explosion(pygame.sprite.Sprite):
@@ -272,10 +280,58 @@ def game_menu():
                 running = True
 
 
-def dead():
-    #draw_text()
-    game_menu()
+def died():
+    WINDOW.blit(background, background_rect)
+    draw_text(WINDOW, 'YOU HAVE DIED', 63, WIDTH / 2, HEIGHT / 4)
+    pygame.display.flip()
+    time.sleep(3)
+    dead = True
 
+def invaded():
+    WINDOW.blit(background, background_rect)
+    draw_text(WINDOW, 'INVADED', 63, WIDTH / 2, HEIGHT / 4)
+    pygame.display.flip()
+    time.sleep(3)
+    # dead = True
+    # if dead:
+    #     game_menu()
+    #     dead = False
+    #     # groups
+    #     all_sprites = pygame.sprite.Group()
+    #     enemies = pygame.sprite.Group()
+    #     enemies1 = pygame.sprite.Group()
+    #     enemies2 = pygame.sprite.Group()
+    #     enemies3 = pygame.sprite.Group()
+    #     bullets = pygame.sprite.Group()
+    #     wall = Wall()
+    #     player = Player()
+    #     enemy = Enemy()
+    #     enemy1 = Enemy1()
+    #     enemy2 = Enemy2()
+    #     enemy3 = Enemy3()
+    #     all_sprites.add(player)
+    #     all_sprites.add(wall)
+    #
+    #     for i in range(2):
+    #         e = Enemy()
+    #         all_sprites.add(e)
+    #         enemies.add(e)
+    #
+    #     for i in range(3):
+    #         e1 = Enemy1()
+    #         all_sprites.add(e1)
+    #         enemies1.add(e1)
+    #
+    #     for i in range(2):
+    #         e2 = Enemy2()
+    #         all_sprites.add(e2)
+    #         enemies2.add(e2)
+    #
+    #     for i in range(1):
+    #         e3 = Enemy3()
+    #         all_sprites.add(e3)
+    #         enemies3.add(e3)
+    #     player_score = 0
 #...................................SOUND LOADS...................................#
 
 lazer_shoot     = pygame.mixer.Sound(os.path.join(game_folder, 'Laser_Shoot3.wav'))
@@ -311,12 +367,14 @@ while running:
         enemies2 = pygame.sprite.Group()
         enemies3 = pygame.sprite.Group()
         bullets = pygame.sprite.Group()
+        wall = Wall()
         player = Player()
         enemy = Enemy()
         enemy1 = Enemy1()
         enemy2 = Enemy2()
         enemy3 = Enemy3()
         all_sprites.add(player)
+        all_sprites.add(wall)
 
         for i in range(2):
             e = Enemy()
@@ -419,8 +477,8 @@ while running:
         all_sprites.add(explosion)
         print("                                                             hit")
         running = False
-        dead = True
-        game_menu()
+        died()
+        # game_menu()
     hits = pygame.sprite.spritecollide(player, enemies1, False)
     for hit in hits:
         random.choice(explosion_sounds).play()
@@ -428,8 +486,8 @@ while running:
         all_sprites.add(explosion)
         print("                                                             hit")
         running = False
-        dead = True
-        game_menu()
+        died()
+        # game_menu()
     hits = pygame.sprite.spritecollide(player, enemies2, False)
     for hit in hits:
         random.choice(explosion_sounds).play()
@@ -437,8 +495,8 @@ while running:
         all_sprites.add(explosion)
         print("                                                             hit")
         running = False
-        dead = True
-        game_menu()
+        died()
+        # game_menu()
     hits = pygame.sprite.spritecollide(player, enemies3, False)
     for hit in hits:
         random.choice(explosion_sounds).play()
@@ -446,8 +504,8 @@ while running:
         all_sprites.add(explosion)
         print("                                                             hit")
         running = False
-        dead = True
-        game_menu()
+        died()
+        # game_menu()
 
     #   LOGIC   #
     if player.rect.right    > (WIDTH - 20):
@@ -455,13 +513,33 @@ while running:
     if player.rect.left     < 20:
         player.rect.left    = 20
 
-    if enemy.rect.top       > (HEIGHT - 100):
-        running             = False
+   # if enemy.rect  < (HEIGHT):
+        #running             = False
+    #bottom border
+    hits = pygame.sprite.spritecollide(wall, enemies, False, False)
+    for hit in hits:
+        invaded()
+        game_menu()
+
+    hits = pygame.sprite.spritecollide(wall, enemies1, False, False)
+    for hit in hits:
+        invaded()
+        game_menu()
+    hits = pygame.sprite.spritecollide(wall, enemies2, False, False)
+    for hit in hits:
+        invaded()
+        game_menu()
+    hits = pygame.sprite.spritecollide(wall, enemies3, False, False)
+    for hit in hits:
+        invaded()
+        game_menu()
 
     WINDOW.fill(BLUE)
     WINDOW.blit(background, background_rect)
     all_sprites.draw(WINDOW)
     draw_text(WINDOW, str(player_score), 20, WIDTH / 2, 20)
+
+
     # flip last
     pygame.display.flip()
 
