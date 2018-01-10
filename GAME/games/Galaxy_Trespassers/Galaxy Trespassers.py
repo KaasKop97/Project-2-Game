@@ -91,21 +91,19 @@ class Player(pygame.sprite.Sprite):
     def update(self):
         self.speedx = 0
         keystate = pygame.key.get_pressed()
-        if keystate[pygame.K_LEFT or pygame.K_a]:
+        if keystate[pygame.K_LEFT]:
             self.image  = player.image_2
-            self.speedx = - self.added_speed
-        if keystate[pygame.K_RIGHT or pygame.K_d]:
+            self.speedx =- self.added_speed
+        if keystate[pygame.K_RIGHT]:
             self.image  = player.image_2
-            self.speedx = self.added_speed
+            self.speedx =+ self.added_speed
+            if keystate[pygame.K_a]:
+                self.image = player.image_2
+                self.speedx =- self.added_speed
+            if keystate[pygame.K_d]:
+                self.image = player.image_2
+                self.speedx =+ self.added_speed
         if keystate[pygame.K_SPACE]:
-            self.shoot()
-        if keystate[pygame.K_SPACE and pygame.K_d or pygame.K_RIGHT]:
-            self.image  = player.image_2
-            self.speedx = self.added_speed
-            self.shoot()
-        if keystate[pygame.K_SPACE and pygame.K_a or pygame.K_LEFT]:
-            self.image  = player.image_2
-            self.speedx = - self.added_speed
             self.shoot()
         self.rect.x += self.speedx
         if self.rect.right > WIDTH:
@@ -153,7 +151,7 @@ class Enemy1(pygame.sprite.Sprite):
         self.rect   = self.image.get_rect()
         self.radius = int(self.rect.width / 3)
         self.rect.x = random.randrange(0, WIDTH - self.rect.width)
-        self.rect.y = random.randrange(-600, -80)
+        self.rect.y = random.randrange(-700, -80)
         self.speedy = 2
         Enemy1.value  = 100
 
@@ -161,7 +159,7 @@ class Enemy1(pygame.sprite.Sprite):
         self.rect.y += self.speedy
         if self.rect.top > HEIGHT + 10:
             self.rect.x = random.randrange(0, WIDTH - self.rect.width)
-            self.rect.y = random.randrange(-600, -80)
+            self.rect.y = random.randrange(-700, -80)
             self.speedy = 2
         if self.rect.top < 20:
             running = False
@@ -170,12 +168,12 @@ class Enemy1(pygame.sprite.Sprite):
 class Enemy2(pygame.sprite.Sprite):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
-        self.image = pygame.image.load(os.path.join(game_folder, 'enemy ship flying 4.png')).convert()
+        self.image = pygame.image.load(os.path.join(game_folder, 'enemy ship flying 3.png')).convert()
         self.image.set_colorkey(BLACK)
         self.rect = self.image.get_rect()
         self.radius = int(self.rect.width / 3)
         self.rect.x = random.randrange(0, WIDTH - self.rect.width)
-        self.rect.y = random.randrange(-600, -80)
+        self.rect.y = random.randrange(-800, -80)
         self.speedy = 3
         Enemy2.value = 150
 
@@ -183,7 +181,7 @@ class Enemy2(pygame.sprite.Sprite):
         self.rect.y += self.speedy
         if self.rect.top > HEIGHT + 10:
             self.rect.x = random.randrange(0, WIDTH - self.rect.width)
-            self.rect.y = random.randrange(-600, -80)
+            self.rect.y = random.randrange(-800, -80)
             self.speedy = 3
         if self.rect.top < 20:
                 running = False
@@ -197,7 +195,7 @@ class Enemy3(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.radius = int(self.rect.width / 3)
         self.rect.x = random.randrange(0, WIDTH - self.rect.width)
-        self.rect.y = random.randrange(-800, -80)
+        self.rect.y = random.randrange(-1000, -80)
         self.speedy = 4
         Enemy3.value = 500
 
@@ -261,7 +259,7 @@ class Explosion(pygame.sprite.Sprite):
 def game_menu():
     WINDOW.blit(background, background_rect)
     draw_text(WINDOW, 'GALAXY TRESPASSERS', 63, WIDTH / 2, HEIGHT / 6)
-    draw_text(WINDOW, 'PRESS ANY KEY TO CONTINUE', 40, WIDTH / 2, HEIGHT / 2.57)
+    draw_text(WINDOW, 'PRESS TAB TO CONTINUE', 40, WIDTH / 2, HEIGHT / 2.57)
     draw_text(WINDOW, 'use WASD or arrow keys to move', 22, WIDTH / 2, HEIGHT / 1.5)
     draw_text(WINDOW, 'tap or hold space to fire', 22, WIDTH / 2, HEIGHT / 1.4)
     draw_text(WINDOW, 'press esc to quit game', 22, WIDTH / 2, HEIGHT / 1.2)
@@ -276,62 +274,23 @@ def game_menu():
                 if event.key == pygame.K_ESCAPE:
                     pygame.quit()
             elif event.type == pygame.KEYUP:
-                waiting = False
-                running = True
-
+                if event.key == pygame.K_TAB:
+                    waiting = False
 
 def died():
     WINDOW.blit(background, background_rect)
     draw_text(WINDOW, 'YOU HAVE DIED', 63, WIDTH / 2, HEIGHT / 4)
     pygame.display.flip()
     time.sleep(3)
-    dead = True
+
 
 def invaded():
     WINDOW.blit(background, background_rect)
     draw_text(WINDOW, 'INVADED', 63, WIDTH / 2, HEIGHT / 4)
     pygame.display.flip()
     time.sleep(3)
-    # dead = True
-    # if dead:
-    #     game_menu()
-    #     dead = False
-    #     # groups
-    #     all_sprites = pygame.sprite.Group()
-    #     enemies = pygame.sprite.Group()
-    #     enemies1 = pygame.sprite.Group()
-    #     enemies2 = pygame.sprite.Group()
-    #     enemies3 = pygame.sprite.Group()
-    #     bullets = pygame.sprite.Group()
-    #     wall = Wall()
-    #     player = Player()
-    #     enemy = Enemy()
-    #     enemy1 = Enemy1()
-    #     enemy2 = Enemy2()
-    #     enemy3 = Enemy3()
-    #     all_sprites.add(player)
-    #     all_sprites.add(wall)
-    #
-    #     for i in range(2):
-    #         e = Enemy()
-    #         all_sprites.add(e)
-    #         enemies.add(e)
-    #
-    #     for i in range(3):
-    #         e1 = Enemy1()
-    #         all_sprites.add(e1)
-    #         enemies1.add(e1)
-    #
-    #     for i in range(2):
-    #         e2 = Enemy2()
-    #         all_sprites.add(e2)
-    #         enemies2.add(e2)
-    #
-    #     for i in range(1):
-    #         e3 = Enemy3()
-    #         all_sprites.add(e3)
-    #         enemies3.add(e3)
-    #     player_score = 0
+
+
 #...................................SOUND LOADS...................................#
 
 lazer_shoot     = pygame.mixer.Sound(os.path.join(game_folder, 'Laser_Shoot3.wav'))
@@ -381,7 +340,7 @@ while running:
             all_sprites.add(e)
             enemies.add(e)
 
-        for i in range(3):
+        for i in range(2):
             e1 = Enemy1()
             all_sprites.add(e1)
             enemies1.add(e1)
@@ -404,30 +363,25 @@ while running:
         if event.type == pygame.QUIT:
             running = False
         elif event.type == pygame.KEYDOWN:
-            if (event.key == pygame.K_LEFT) or (event.key == pygame.K_a):
-                #   WASD also availible
+            if (event.key == pygame.K_LEFT):
                 player.image = player.image_2
                 #   changes player sprite to flying state
-                player.speedx = - player.added_speed
+                player.speedx =- player.added_speed
                 #   assigns set speed to player movement
-            elif (event.key == pygame.K_RIGHT) or (event.key == pygame.K_d):
+            elif (event.key == pygame.K_RIGHT):
                 player.image = player.image_2
-                player.speedx = + player.added_speed
+                player.speedx =+ player.added_speed
             elif (event.key == pygame.K_SPACE):
                 player.shoot()
             elif (event.key == pygame.K_ESCAPE):
                 pygame.quit()
-        elif event.type == pygame.KEYDOWN:
-            if (event.key == pygame.K_RIGHT) or (event.key == pygame.K_d):
-                player.image = player.image_2
-                player.speedx = + player.added_speed
+
         elif event.type == pygame.KEYUP:
-            if event.key == pygame.K_LEFT or event.key == pygame.K_a or event.key == pygame.K_RIGHT or event.key == pygame.K_d :
+            if event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT:
                 player.speedx = 0
                 player.image = player.image_default
                 #   resets player image on key up
 
-    all_sprites.update()
     #   collision enemies-bullets
     hits = pygame.sprite.groupcollide(enemies, bullets, True, True)
     for hit in hits:
@@ -476,7 +430,7 @@ while running:
         explosion = Explosion(hit.rect.center)
         all_sprites.add(explosion)
         print("                                                             hit")
-        running = False
+        dead = True
         died()
         # game_menu()
     hits = pygame.sprite.spritecollide(player, enemies1, False)
@@ -485,7 +439,7 @@ while running:
         explosion = Explosion(hit.rect.center)
         all_sprites.add(explosion)
         print("                                                             hit")
-        running = False
+        dead = True
         died()
         # game_menu()
     hits = pygame.sprite.spritecollide(player, enemies2, False)
@@ -494,7 +448,7 @@ while running:
         explosion = Explosion(hit.rect.center)
         all_sprites.add(explosion)
         print("                                                             hit")
-        running = False
+        dead = True
         died()
         # game_menu()
     hits = pygame.sprite.spritecollide(player, enemies3, False)
@@ -503,7 +457,7 @@ while running:
         explosion = Explosion(hit.rect.center)
         all_sprites.add(explosion)
         print("                                                             hit")
-        running = False
+        dead = True
         died()
         # game_menu()
 
@@ -518,27 +472,32 @@ while running:
     #bottom border
     hits = pygame.sprite.spritecollide(wall, enemies, False, False)
     for hit in hits:
+        dead = True
         invaded()
-        game_menu()
+        # game_menu()
 
     hits = pygame.sprite.spritecollide(wall, enemies1, False, False)
     for hit in hits:
+        dead = True
         invaded()
-        game_menu()
+        # game_menu()
     hits = pygame.sprite.spritecollide(wall, enemies2, False, False)
     for hit in hits:
+        dead = True
         invaded()
-        game_menu()
+        # game_menu()
     hits = pygame.sprite.spritecollide(wall, enemies3, False, False)
     for hit in hits:
+        dead = True
         invaded()
-        game_menu()
+        # game_menu()
 
     WINDOW.fill(BLUE)
     WINDOW.blit(background, background_rect)
     all_sprites.draw(WINDOW)
     draw_text(WINDOW, str(player_score), 20, WIDTH / 2, 20)
 
+    all_sprites.update()
 
     # flip last
     pygame.display.flip()
