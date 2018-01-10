@@ -13,7 +13,7 @@ class MenuHelper:
             "DRON",
             "Galaxy Trespasser",
             "Race",
-            "Dodge the fangirls"
+            "Dodge the Fangirls"
         ]
         self.rectangles = {}
         self.currently_drawn = ""
@@ -39,7 +39,7 @@ class MenuHelper:
             if value.collidepoint(click_position[0], click_position[1]):
                 return key
             else:
-                return "main"
+                return "Dodge the Fangirls"
 
     def draw_menu(self, menu_name):
         self.reset_menu()

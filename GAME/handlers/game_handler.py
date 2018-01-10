@@ -15,7 +15,7 @@ class GameHandler:
         self.DRON = DRON.Dron(self.surface)
         #self.GT = Galaxy_Trespassers.ZoneTrespassers()
         self.race = race.Race()
-        self.DF = dodge_fangirls.DodgeFangirls()
+        self.DF = dodge_fangirls.DodgeFangirls(self.surface)
 
         self.game_names = [
             self.DRON.game_name,

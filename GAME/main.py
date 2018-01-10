@@ -39,6 +39,8 @@ class Main:
                                 self.menu.draw_menu("PLAY")
                             elif button_pressed == "DRON":
                                 self.game_handler.load_game("DRON")
+                            elif button_pressed == "Dodge the Fangirls":
+                                self.game_handler.load_game("Dodge the Fangirls")
                             elif button_pressed == "QUIT":
                                 self.running = False
                                 pygame.quit()
