@@ -35,15 +35,16 @@ class Main:
                     if event.type == pygame.MOUSEBUTTONDOWN:
                         button_pressed = self.menu.get_button_pressed(event.pos)
                         if not button_pressed == self.menu.currently_drawn:
+                            print(button_pressed)
                             if button_pressed == "PLAY":
                                 self.menu.draw_menu("PLAY")
+                            elif button_pressed == "QUIT":
+                                self.running = False
+                                pygame.quit()
                             elif button_pressed == "DRON":
                                 self.game_handler.load_game("DRON")
                             elif button_pressed == "Dodge the Fangirls":
                                 self.game_handler.load_game("Dodge the Fangirls")
-                            elif button_pressed == "QUIT":
-                                self.running = False
-                                pygame.quit()
                             else:
                                 print("ERROR: Can't load button since there is no definition for it.")
                     elif event.type == pygame.QUIT:
