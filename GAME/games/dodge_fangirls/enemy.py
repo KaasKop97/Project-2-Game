@@ -9,7 +9,7 @@ class Enemys(pygame.sprite.Sprite):
         self.Y = y
         self.W = w
         self.H = h
-        self.speed = 10
+        self.speed = 3
         self.score = score
         self.image = pygame.image.load(img)
         self.rect = self.image.get_rect()
@@ -22,3 +22,8 @@ class Enemys(pygame.sprite.Sprite):
     def update(self):
         print(self.rect.y)
         self.rect.move_ip(0, self.speed)
+
+        if self.rect.top > self.game_height + 10:
+            self.rect.x = self.X
+            self.rect.y = self.Y
+            self.speed = 3
