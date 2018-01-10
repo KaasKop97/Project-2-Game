@@ -8,13 +8,17 @@ import pygame
 # TODO: Back functionality
 class MenuHelper:
     def __init__(self, surface):
-        self.main_menu_items = ["PLAY", "SETTINGS", "CREDITS", "QUIT"]
+        self.main_menu_items = ["PLAY", "SETTINGS", "QUIT"]
         self.game_names = [
             "DRON",
             "Galaxy Trespasser",
             "Race",
             "Dodge the Fangirls"
         ]
+        self.settings_items = {
+            "Audio:",
+            "Resolution?"
+        }
         self.rectangles = {}
         self.currently_drawn = ""
 
@@ -31,15 +35,17 @@ class MenuHelper:
         label = self.font.render(text, 1, text_colour)
 
         self.rectangles[text] = rect
+        print(self.rectangles)
 
         self.surface.blit(label, (x + 2, y))
 
     def get_button_pressed(self, click_position):
         for key, value in self.rectangles.items():
-            if value.collidepoint(click_position[0], click_position[1]):
-                return key
-            else:
-                return "Dodge the Fangirls"
+            try:
+                if value.collidepoint(click_position[0], click_position[1]):
+                    return key
+            except KeyError:
+                print("Key does not exists!")
 
     def draw_menu(self, menu_name):
         self.reset_menu()
