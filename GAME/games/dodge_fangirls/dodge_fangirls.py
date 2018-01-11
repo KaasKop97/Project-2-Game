@@ -30,7 +30,7 @@ class DodgeFangirls:
                                    os.path.join("games", "dodge_fangirls", "data", "OBSTACLE2.png"), 2)
         self.enemy1 = enemy.Enemys(random.randrange(0, self.game_width), -100, 45, 57,
                                    os.path.join("games", "dodge_fangirls", "data", "RiCHARACTER.png"), 1)
-                                   
+
         self.sprite_group = pygame.sprite.Group()
         self.sprite_group.add(self.Player, self.enemy1, self.enemy2, self.enemy3, self.enemy4)
         self.enemies = [self.enemy1, self.enemy2, self.enemy3, self.enemy4]
