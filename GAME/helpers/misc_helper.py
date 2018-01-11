@@ -42,11 +42,11 @@ class MiscHelper:
         surface.blit(text, (x, y))
 
     @staticmethod
-    def play_music(soundfile):
+    def play_music(soundfile, loop):
         pygame.mixer.init()
         pygame.mixer.music.load(soundfile)
-        pygame.mixer.music.play(1)
+        pygame.mixer.music.play(loop)
 
     @staticmethod
     def stop_music():
-        pygame.mixer.music.stop()
+        pygame.mixer.music.fadeout(500)

@@ -16,7 +16,7 @@ game_folder = game_folder = os.path.abspath("data/")
     #   DISPLAY  #
 os.environ['SDL_VIDEO_CENTERED'] = '1'
 WIDTH           = 800
-HEIGHT          = 700
+HEIGHT          = 600
 WINDOW          = pygame.display.set_mode((WIDTH, HEIGHT))
 FPS             = 60
 TITLE           = 'GALAXY TRESPASSERS'
@@ -38,19 +38,6 @@ BLUE    = (000, 000, 255)
 YELLOW  = (255, 255, 000)
 PINK    = (255, 102, 102)
 
-
-   #   ENEMY   #
-ENEMY            = pygame.image.load(os.path.join(game_folder, 'enemy ship.png')).convert()
-
-    #   PLAYER  #
-SHIP            = pygame.image.load(os.path.join(game_folder, 'aircraft zone trespassers.png')).convert()
-SHIP_TOP        = WINDOW.get_height() - SHIP.get_height()
-SHIP_MID        = WINDOW.get_width()/2 - SHIP.get_width()/2
-
-    #   BULLET  #
-BULLET        = pygame.image.load(os.path.join(game_folder, 'bullet.png')).convert()
-BULLET_HEIGHT = BULLET.get_height()
-BULLET_WIDTH  = BULLET.get_width()
 
 font_name = pygame.font.match_font('verdana')
 
@@ -82,8 +69,8 @@ class Player(pygame.sprite.Sprite):
         self.rect.bottom    = HEIGHT - 20
         self.radius         = int(self.rect.width / 3)
         self.speedx         = 0
-        self.added_speed    = 7
-        self.shoot_delay    = 380
+        self.added_speed    = 8.5
+        self.shoot_delay    = 360
         self.last_shot      = pygame.time.get_ticks()
 
 
@@ -129,7 +116,7 @@ class Enemy(pygame.sprite.Sprite):
         self.rect   = self.image.get_rect()
         self.radius = int(self.rect.width / 3)
         self.rect.x = random.randrange(0, WIDTH - self.rect.width)
-        self.rect.y = random.randrange(-600, -80)
+        self.rect.y = random.randrange(-600, -100)
         self.speedy = 1
         Enemy.score = 50
 
@@ -137,7 +124,7 @@ class Enemy(pygame.sprite.Sprite):
         self.rect.y += self.speedy
         if self.rect.top > HEIGHT + 10:
             self.rect.x = random.randrange(0, WIDTH - self.rect.width)
-            self.rect.y = random.randrange(-600, -80)
+            self.rect.y = random.randrange(-600, -100)
             self.speedy = 1
         if self.rect.top < 20:
             running = False
@@ -151,7 +138,7 @@ class Enemy1(pygame.sprite.Sprite):
         self.rect   = self.image.get_rect()
         self.radius = int(self.rect.width / 3)
         self.rect.x = random.randrange(0, WIDTH - self.rect.width)
-        self.rect.y = random.randrange(-700, -80)
+        self.rect.y = random.randrange(-800, -150)
         self.speedy = 2
         Enemy1.value  = 100
 
@@ -159,7 +146,7 @@ class Enemy1(pygame.sprite.Sprite):
         self.rect.y += self.speedy
         if self.rect.top > HEIGHT + 10:
             self.rect.x = random.randrange(0, WIDTH - self.rect.width)
-            self.rect.y = random.randrange(-700, -80)
+            self.rect.y = random.randrange(-800, -150)
             self.speedy = 2
         if self.rect.top < 20:
             running = False
@@ -173,7 +160,7 @@ class Enemy2(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.radius = int(self.rect.width / 3)
         self.rect.x = random.randrange(0, WIDTH - self.rect.width)
-        self.rect.y = random.randrange(-800, -80)
+        self.rect.y = random.randrange(-900, -300)
         self.speedy = 3
         Enemy2.value = 150
 
@@ -181,10 +168,9 @@ class Enemy2(pygame.sprite.Sprite):
         self.rect.y += self.speedy
         if self.rect.top > HEIGHT + 10:
             self.rect.x = random.randrange(0, WIDTH - self.rect.width)
-            self.rect.y = random.randrange(-800, -80)
+            self.rect.y = random.randrange(-900, -300)
             self.speedy = 3
-        if self.rect.top < 20:
-                running = False
+
 
     #   class enemy 3
 class Enemy3(pygame.sprite.Sprite):
@@ -195,7 +181,7 @@ class Enemy3(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.radius = int(self.rect.width / 3)
         self.rect.x = random.randrange(0, WIDTH - self.rect.width)
-        self.rect.y = random.randrange(-1000, -80)
+        self.rect.y = random.randrange(-2000, -800)
         self.speedy = 4
         Enemy3.value = 500
 
@@ -203,10 +189,9 @@ class Enemy3(pygame.sprite.Sprite):
         self.rect.y += self.speedy
         if self.rect.top > HEIGHT + 10:
             self.rect.x = random.randrange(0, WIDTH - self.rect.width)
-            self.rect.y = random.randrange(-1000, -80)
+            self.rect.y = random.randrange(-2000, -800)
             self.speedy = 4
-            if self.rect.top < 20:
-                running = False
+
     #   class bullet
 class Bullet(pygame.sprite.Sprite):
     def __init__(self, x, y):
@@ -279,16 +264,20 @@ def game_menu():
 
 def died():
     WINDOW.blit(background, background_rect)
-    draw_text(WINDOW, 'YOU HAVE DIED', 63, WIDTH / 2, HEIGHT / 4)
+    draw_text(WINDOW, 'YOU HAVE DIED', 63, WIDTH / 2, HEIGHT / 4.4)
+    draw_text(WINDOW, 'your score:', 22, WIDTH / 2, HEIGHT / 2.3)
+    draw_text(WINDOW, str(player_score) + 'pts', 42, WIDTH / 2, HEIGHT / 1.9)
     pygame.display.flip()
-    time.sleep(3)
+    time.sleep(4)
 
 
 def invaded():
     WINDOW.blit(background, background_rect)
-    draw_text(WINDOW, 'INVADED', 63, WIDTH / 2, HEIGHT / 4)
+    draw_text(WINDOW, 'INVADED', 63, WIDTH / 2, HEIGHT / 4.4)
+    draw_text(WINDOW, 'your score:', 22, WIDTH / 2, HEIGHT / 2.3)
+    draw_text(WINDOW, str(player_score) + 'pts', 42, WIDTH / 2, HEIGHT / 1.9)
     pygame.display.flip()
-    time.sleep(3)
+    time.sleep(4)
 
 
 #...................................SOUND LOADS...................................#
@@ -357,7 +346,7 @@ while running:
         player_score = 0
 
     clock.tick(FPS)
-    WINDOW.blit(player.image, (SHIP_MID, SHIP_TOP))
+    #WINDOW.blit(player.image, (SHIP_MID, SHIP_TOP))
     # EVENT INPUTS #
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
