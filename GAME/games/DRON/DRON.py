@@ -1,6 +1,7 @@
 import pygame
 import random
 import os
+import math
 
 from games.DRON.MotorBike import MotorBike
 from helpers import misc_helper, log_helper
@@ -20,8 +21,8 @@ class Dron:
         self.misc = misc_helper.MiscHelper()
         self.log = log_helper.LogHelper()
 
-        self.bike = MotorBike((20, 20), 1, (255, 0, 0), self.surface)
-        self.opponent = MotorBike((500, 500), 1, (0, 255, 0), self.surface)
+        self.bike = MotorBike((20, self.game_height // 2), 1, (255, 0, 0), self.surface)
+        self.opponent = MotorBike((self.game_width - 50, self.game_height // 2), 3, (0, 255, 0), self.surface)
 
         self.sprite_group = pygame.sprite.Group()
         self.sprite_group.add(self.bike, self.opponent)
@@ -41,7 +42,7 @@ class Dron:
     def load(self):
         # try:
         #     #self.misc.set_background(surface, os.path.abspath("games/DRON/data/floor.png"))
-        #     self.misc.play_music(os.path.abspath("games/DRON/data/music.ogg"))
+        #     self.misc.play_music(os.path.abspath("games/DRON/data/music.ogg"), 0)
         # except pygame.error as e:
         #     self.log.write_log("ERROR", "Something died fix it you idiot: " + str(e))
         #     return False
@@ -80,24 +81,53 @@ class Dron:
     # http://zulko.github.io/easyAI/get_started.html
     def handle_cpu_players(self):
         possible_moves = [0, 1, 2, 3]
-        evasive_maneuver_done = False
+        """evasive_maneuver_done = False
 
-        if random.randint(0, 1000) > 950:
+        if self.opponent.rect.x not in range(20, 1420) or self.opponent.rect.y not in range(20, 1420):
+            if self.opponent.direction == 0 or self.opponent.direction == 2:
+                possible_moves = [1, 3]
+                evasive_maneuver_done = True
+            elif self.opponent.direction == 1 or self.opponent.direction == 3:
+                possible_moves = [0, 2]
+                evasive_maneuver_done = True
+
+        if random.randint(0, 1000) > 900:
             # Determing if the CPU is close to the edge and settings its possible moves
-            if self.opponent.rect.x not in range(20, 1420) or self.opponent.rect.y not in range(20, 1420):
-                if self.opponent.direction == 0 or self.opponent.direction == 2:
-                    possible_moves = [1, 3]
-                    evasive_maneuver_done = True
-                elif self.opponent.direction == 1 or self.opponent.direction == 3:
-                    possible_moves = [0, 2]
-                    evasive_maneuver_done = True
             # Here we actually change the direction of the CPU.
             if evasive_maneuver_done:
                 self.opponent.direction = random.randint(possible_moves[0], possible_moves[1])
             else:
                 possible_moves = [0, 1, 2, 3]
                 self.opponent.direction = random.randint(0, len(possible_moves))
-                evasive_maneuver_done = False
+                evasive_maneuver_done = False"""
+        # Find direction to player
+        dx, dy = self.bike.rect.x - self.opponent.rect.x, self.bike.rect.y - self.opponent.rect.y
+        dist = math.hypot(dx, dy)
+        try:
+            dx, dy = dx / dist, dy / dist
+        except ZeroDivisionError:
+            print("Woopsie")
+
+        if dx <= 0 and dy <= 0:
+            possible_moves = [0, 1, 3]
+            print("Left top")
+        elif dx >= 0 and dy <= 0:
+            possible_moves = [0, 1, 2]
+            print("right top")
+        elif dx <= 0 and dy >= 0:
+            possible_moves = [1, 2, 3]
+            print("Left bottom")
+        elif dx >= 0 and dy >= 0:
+            possible_moves = [0, 1, 2]
+            print("right bottom")
+        else:
+            print("Idk where the fuck he is...")
+
+        if random.randrange(0, 1000) > 850:
+
+            self.opponent.direction = random.choice(possible_moves)
+
+
 
     def handle_line_thing(self):
         player_line = self.bike.line
