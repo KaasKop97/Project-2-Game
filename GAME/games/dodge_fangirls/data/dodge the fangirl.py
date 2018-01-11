@@ -42,7 +42,7 @@ clock = pygame.time.Clock()
 fan4Img = pygame.image.load('OBSTACLE4.png')
 fan3Img = pygame.image.load('OBSTACLE3.png')
 fan2Img = pygame.image.load('OBSTACLE2.png')
-fanriImg = pygame.image.load('rihannaCHARACTER.png')
+fanriImg = pygame.image.load('RiCHARACTER.png')
 cbImg = pygame.image.load('cbCHARACTER.png')
 
 
