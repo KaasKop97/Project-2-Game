@@ -26,6 +26,7 @@ class GameHandler:
 
     def load_game(self, game_name):
         # This will load a specific game from the games directory
+        print("Loading game..")
         if game_name in self.game_names:
             self.loaded_game = game_name
             self.log.write_log("INFO", "GAME: " + self.loaded_game + " loaded.")
@@ -36,6 +37,7 @@ class GameHandler:
                 self.game = self.GT
                 self.game.load(self.surface)
             elif game_name == "Race":
+                print("loading")
                 self.game = self.race
                 self.game.load(self.surface)
             elif game_name == "Dodge the Fangirls":
