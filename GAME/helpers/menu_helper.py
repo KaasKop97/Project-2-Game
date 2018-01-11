@@ -15,10 +15,6 @@ class MenuHelper:
             "Race",
             "Dodge the Fangirls"
         ]
-        self.settings_items = {
-            "Audio:",
-            "Resolution?"
-        }
         self.rectangles = {}
         self.currently_drawn = ""
 
@@ -35,7 +31,6 @@ class MenuHelper:
         label = self.font.render(text, 1, text_colour)
 
         self.rectangles[text] = rect
-        print(self.rectangles)
 
         self.surface.blit(label, (x + 2, y))
 

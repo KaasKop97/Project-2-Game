@@ -77,10 +77,27 @@ class Dron:
     def key_up(self, key):
         pass
 
+    # http://zulko.github.io/easyAI/get_started.html
     def handle_cpu_players(self):
-        # http://zulko.github.io/easyAI/get_started.html
+        possible_moves = [0, 1, 2, 3]
+        evasive_maneuver_done = False
+
         if random.randint(0, 1000) > 950:
-            self.opponent.direction = random.randint(0, 3)
+            # Determing if the CPU is close to the edge and settings its possible moves
+            if self.opponent.rect.x not in range(20, 1420) or self.opponent.rect.y not in range(20, 1420):
+                if self.opponent.direction == 0 or self.opponent.direction == 2:
+                    possible_moves = [1, 3]
+                    evasive_maneuver_done = True
+                elif self.opponent.direction == 1 or self.opponent.direction == 3:
+                    possible_moves = [0, 2]
+                    evasive_maneuver_done = True
+            # Here we actually change the direction of the CPU.
+            if evasive_maneuver_done:
+                self.opponent.direction = random.randint(possible_moves[0], possible_moves[1])
+            else:
+                possible_moves = [0, 1, 2, 3]
+                self.opponent.direction = random.randint(0, len(possible_moves))
+                evasive_maneuver_done = False
 
     def handle_line_thing(self):
         player_line = self.bike.line
@@ -104,10 +121,10 @@ class Dron:
     def victory(self):
         self.bike.direction = 4
         self.opponent.direction = 4
-        self.misc.draw_text("Inconsolate", 80, "You've won! Press R to retry", (255, 0, 0), self.surface, 50, 50)
+        self.misc.draw_text("Inconsolate", 80, "You've won! Press R to retry", (0, 255, 0), self.surface, 50, 50)
 
     def player_dead(self):
-        self.bike.direction = 4
+        #self.bike.direction = 4
         self.opponent.direction = 4
         self.misc.draw_text("Inconsolate", 80, "You're dead! Press R to retry.", (255, 0, 0), self.surface, 50, 50)
 
