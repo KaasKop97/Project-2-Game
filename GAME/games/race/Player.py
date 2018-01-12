@@ -20,7 +20,7 @@ class Player (pygame.sprite.Sprite):
         self.game_width         =       int(self.conf.get_value("game", "width"))
         self.game_height        =       int(self.conf.get_value("game", "height"))
         self.changeX            =       0
-        self.dead               =       False
+        self.dead               =       True
 
     def update(self):
 
