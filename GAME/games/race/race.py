@@ -53,11 +53,13 @@ class race:
     def dead(self):
         self.misc.draw_text("freesanbold.ttf", 50, "DEAD", (255, 0, 0), self.GameDisplay,
                             self.game_width / 2, self.game_height / 2)
+        self.misc.draw_text("freesanbold.ttf", 30, "Press ESC to play another game", (255,255,255), self.GameDisplay,
+                            self.game_width / 2, self.game_height / 2)
 
         self.truck.speed = 0
         self.player.changeX = 0
         self.misc.stop_music()
-        self.dead = True
+        self.dead = False
 
     def mousebutton_down(self, surface, event):
         pass
@@ -72,7 +74,7 @@ class race:
             self.player.ChangeX = 0
 
     def key_down(self, key):
-        #if not self.player.dead:
+        if not self.player.dead:
             if key == 97 or key == 276:
                 self.player.changeX = -5
             elif key == 100 or key == 275:
