@@ -26,7 +26,6 @@ class GameHandler:
 
     def load_game(self, game_name):
         # This will load a specific game from the games directory
-        print("Loading game..")
         if game_name in self.game_names:
             self.loaded_game = game_name
             self.log.write_log("INFO", "GAME: " + self.loaded_game + " loaded.")
@@ -34,14 +33,12 @@ class GameHandler:
                 self.game = DRON.Dron(self.surface)
                 self.game.load()
             elif game_name == "Zone Trespassers":
-                self.game = self.GT
-                self.game.load()
+                pass
             elif game_name == "Race":
-                print("loading")
-                self.game = self.race
+                self.game = race.race(self.surface)
                 self.game.load()
             elif game_name == "Dodge the Fangirls":
-                self.game = self.DF
+                self.game = dodge_fangirls.DodgeFangirls(self.surface)
                 self.game.load()
             else:
                 print("Game does not exist")
