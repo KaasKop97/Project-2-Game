@@ -24,4 +24,5 @@ class Player (pygame.sprite.Sprite):
 
     def update(self):
 
+        self.dead = True
         self.rect.move_ip(self.changeX, 0)

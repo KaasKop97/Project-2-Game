@@ -59,7 +59,6 @@ class race:
         self.truck.speed = 0
         self.player.changeX = 0
         self.misc.stop_music()
-        self.dead = True
 
     def mousebutton_down(self, surface, event):
         pass
@@ -74,7 +73,7 @@ class race:
             self.player.ChangeX = 0
 
     def key_down(self, key):
-        if not self.player.dead:
+        #if not self.player.dead:
             if key == 97 or key == 276:
                 self.player.changeX = -5
             elif key == 100 or key == 275:
