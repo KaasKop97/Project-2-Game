@@ -35,7 +35,7 @@ class GameHandler:
             elif game_name == "Zone Trespassers":
                 pass
             elif game_name == "Race":
-                self.game = race.race(self.surface)
+                self.game = Race.race(self.surface)
                 self.game.load()
             elif game_name == "Dodge the Fangirls":
                 self.game = dodge_fangirls.DodgeFangirls(self.surface)
