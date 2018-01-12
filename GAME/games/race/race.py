@@ -56,9 +56,11 @@ class race:
         self.misc.draw_text("freesanbold.ttf", 50, "DEAD", (255, 0, 0), self.GameDisplay,
                             self.game_width / 2, self.game_height / 2)
 
-        #self.truck.speed = 0
-
+        self.truck.speed = 0
         self.player.changeX = 0
+        self.misc.stop_music()
+        self.dead = True
+
 
 
     def mousebutton_down(self, surface, event):
