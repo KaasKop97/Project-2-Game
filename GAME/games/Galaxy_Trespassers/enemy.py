@@ -1,86 +1,34 @@
 import pygame
+import os
+import random
+from helpers import misc_helper
+from handlers import config_handler
 
 
-#..................................ENEMY CLASSES..................................#
+# ..................................ENEMY CLASSES..................................#
 
 
-class Enemy00(pygame.sprite.Sprite):
-    def __init__(self):
+class Enemy(pygame.sprite.Sprite):
+    def __init__(self, image):
         pygame.sprite.Sprite.__init__(self)
-        self.image  = os.path.join("games", "Galaxy_Trespassers", "data", "enemy ship flying.png")).convert()
-        self.image.set_colorkey(BLACK)
-        self.rect   = self.image.get_rect()
+        self.misc = misc_helper.MiscHelper()
+        self.conf = config_handler.ConfigHandler()
+
+        self.game_width = int(self.conf.get_value("game", "width"))
+        self.game_height = int(self.conf.get_value("game", "height"))
+        self.image, self.rect = self.misc.load_image(image)
+        self.image.set_colorkey((0, 0, 0))
+        self.rect = self.image.get_rect()
+
         self.radius = int(self.rect.width / 3)
-        self.rect.x = random.randrange(0, game_width - self.rect.width)
+        self.rect.x = random.randrange(0, self.game_width - self.rect.width)
         self.rect.y = random.randrange(-600, -100)
         self.speedy = 1
         Enemy.score = 50
 
     def update(self):
         self.rect.y += self.speedy
-        if self.rect.top > game_height + 10:
-            self.rect.x = random.randrange(0, game_width - self.rect.width)
+        if self.rect.top > self.game_height + 10:
+            self.rect.x = random.randrange(0, self.game_width - self.rect.width)
             self.rect.y = random.randrange(-600, -100)
             self.speedy = 1
-
-
-    #   class enemy1
-class Enemy01(pygame.sprite.Sprite):
-    def __init__(self):
-        pygame.sprite.Sprite.__init__(self)
-        self.image  = os.path.join("games", "Galaxy_Trespassers", "data", "enemy ship flying 2.png')).convert()
-        self.image.set_colorkey(BLACK)
-        self.rect   = self.image.get_rect()
-        self.radius = int(self.rect.width / 3)
-        self.rect.x = random.randrange(0, game_width - self.rect.width)
-        self.rect.y = random.randrange(-800, -150)
-        self.speedy = 2
-        Enemy1.value  = 100
-
-    def update(self):
-        self.rect.y += self.speedy
-        if self.rect.top > game_height + 10:
-            self.rect.x = random.randrange(0, game_width - self.rect.width)
-            self.rect.y = random.randrange(-800, -150)
-            self.speedy = 2
-
-    #   class enemy2
-class Enemy02(pygame.sprite.Sprite):
-    def __init__(self):
-        pygame.sprite.Sprite.__init__(self)
-        self.image      = os.path.join("games", "Galaxy_Trespassers", "data", "enemy ship flying 3.png')).convert()
-        self.image.set_colorkey(BLACK)
-        self.rect       = self.image.get_rect()
-        self.radius = int(self.rect.width / 3)
-        self.rect.x = random.randrange(0, game_width - self.rect.width)
-        self.rect.y = random.randrange(-900, -300)
-        self.speedy = 3
-        Enemy2.value = 150
-
-    def update(self):
-        self.rect.y += self.speedy
-        if self.rect.top > game_height + 10:
-            self.rect.x = random.randrange(0, game_width - self.rect.width)
-            self.rect.y = random.randrange(-900, -300)
-            self.speedy = 3
-
-
-    #   class enemy 3
-class Enemy03(pygame.sprite.Sprite):
-    def __init__(self):
-        pygame.sprite.Sprite.__init__(self)
-        self.image = os.path.join("games", "Galaxy_Trespassers", "data", "enemy ship flying 4.png')).convert()
-        self.image.set_colorkey(BLACK)
-        self.rect = self.image.get_rect()
-        self.radius = int(self.rect.width / 3)
-        self.rect.x = random.randrange(0, game_width - self.rect.width)
-        self.rect.y = random.randrange(-2000, -800)
-        self.speedy = 4
-        Enemy3.value = 500
-
-    def update(self):
-        self.rect.y += self.speedy
-        if self.rect.top > game_height + 10:
-            self.rect.x = random.randrange(0, game_width - self.rect.width)
-            self.rect.y = random.randrange(-2000, -800)
-            self.speedy = 4

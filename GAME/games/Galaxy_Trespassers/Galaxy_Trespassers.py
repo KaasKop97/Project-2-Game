@@ -1,54 +1,57 @@
-import  pygame, sys, time, random, os, math
+import pygame, sys, time, random, os, math
 from handlers import config_handler
-from helpers import misc_helper, log_helper
-from games.Galaxy_Trespassers import player, enemies, wall, bullet, explosion
-from games.Galaxy_Trespassers.bullet import Player
-from games.Galaxy_Trespassers.enemies import enemy00
-from games.Galaxy_Trespassers.enemies import enemy01
-from games.Galaxy_Trespassers.enemies import enemy02
-from games.Galaxy_Trespassers.enemies import enemy03
+from helpers import misc_helper
+
+from games.Galaxy_Trespassers.enemy import Enemy
 from games.Galaxy_Trespassers.bullet import Bullet
 from games.Galaxy_Trespassers.explosion import Explosion
 from games.Galaxy_Trespassers.wall import Wall
+from games.Galaxy_Trespassers.player import Player
+
+
+# Classes to use: Enemy, Player, Bullet, Wall, Explosion
 
 
 class GalaxyTrespassers:
     def __init__(self, surface):
-        self.game_name = "Galaxy_Trespassers"
+        self.game_name = "Galaxy Trespassers"
         self.author = "Chérie Cederboom"
-        self.gamedisplay = surface
+        self.surface = surface
         self.conf = config_handler.ConfigHandler()
+        self.misc = misc_helper.MiscHelper()
         self.game_width = int(self.conf.get_value("game", "width"))
         self.game_height = int(self.conf.get_value("game", "height"))
-        self.Player = player.Player(self.game_width / 2, self.game_height - 20, 70, 56,
-                                    os.path.join("games", "Galaxy_Trespassers", "data", "aircraft (flying) zone trespassers.png"))
-        self.enemy1 = enemy.Enemy00(random.randrange(0, self.game_width), -500, 75, 63,
-                                   os.path.join("games", "Galaxy_Trespassers", "data", "enemy ship flying 3.png"), 50)
-        self.enemy2 = enemy.Enemy01(random.randrange(0, self.game_width), -300, 75, 63,
-                                   os.path.join("games", "Galaxy_Trespassers", "data", "enemy ship flying 5.png"), 150)
-        self.enemy3 = enemy.Enemy02(random.randrange(0, self.game_width), -700, 75, 63,
-                                   os.path.join("games", "Galaxy_Trespassers", "data", "enemy ship flying.png"), 200)
-        self.enemy4 = enemy.Enemy03(random.randrange(0, self.game_width), -100, 75, 63,
-                                   os.path.join("games", "Galaxy_Trespassers", "data", "enemy ship flying 2.png"), 500)
-        self.bullet = bullet.Bullet()
-        self.wall = wall.Wall()
-        self.explosion = explosion.Explosion()
+
+        self.Player = Player()
+        self.enemy1 = Enemy(os.path.join("games", "Galaxy_Trespassers", "data",
+                                         "enemy_ship_flying.png"))
+        self.enemy2 = Enemy(os.path.join("games", "Galaxy_Trespassers", "data",
+                                         "enemy_ship_flying2.png"))
+        self.enemy3 = Enemy(os.path.join("games", "Galaxy_Trespassers", "data",
+                                         "enemy_ship_flying3.png"))
+        self.enemy4 = Enemy(os.path.join("games", "Galaxy_Trespassers", "data",
+                                         "enemy_ship_flying4.png"))
+        # self.wall = wall.Wall()
+        # self.explosion = explosion.Explosion()
         self.sprite_group = pygame.sprite.Group()
         self.sprite_group.add(self.Player, self.enemy1, self.enemy2, self.enemy3,
-                              self.enemy4, self.wall, self.bullet, self.explosion)
+                              self.enemy4)  # , self.wall, self.bullet, self.explosion)
 
-    def load(self, surface):
-        self.misc.set_background(surface, os.path.abspath("games/Galaxy_Trespassers/data/bg1.png"))
-        self.misc.play_music(os.path.abspath("games/Galaxy_Trespassers/data/Galaxy trespassers.wav"))
+    def load(self):
+        try:
+            self.misc.set_background(self.surface, os.path.abspath("games/Galaxy_Trespassers/data/bg1.png"))
+            self.misc.play_music(os.path.join("games", "Galaxy_Trespassers" "data", "Galaxy_trespassers_theme.wav"), -1)
+        except pygame.error as e:
+            print("ERROR in load()")
+            return False
         return True
 
     def update(self):
         # This method gets called every frame so be careful with this one.
-        self.background = os.path.join("games", "Galaxy_Trespassers", "data", "bg1.png")
-        self.background_rect = self.background.get_rect()
+        self.misc.set_background(self.surface, os.path.abspath("games/Galaxy_Trespassers/data/bg1.png"))
+        if self.sprite_group.has()
         self.sprite_group.update()
-        self.sprite_group.draw(self.gamedisplay)
-
+        self.sprite_group.draw(self.surface)
 
     def game_menu(self):
         gamedisplay.blit(background, background_rect)
@@ -79,114 +82,45 @@ class GalaxyTrespassers:
         pygame.display.flip()
         time.sleep(4)
 
-    def invaded(self):
-        gamedisplay.blit(background, background_rect)
-        draw_text(gamedisplay, 'INVADED', 63, game_width / 2, game_height / 4.4)
-        draw_text(gamedisplay, 'your score:', 22, game_width / 2, game_height / 2.3)
-        draw_text(gamedisplay, str(player_score) + 'pts', 42, game_width / 2, game_height / 1.9)
-        pygame.display.flip()
-        time.sleep(4)
+    def mousebutton_down(self, surface, event):
+        # If you need to do an action on mouse button while it's in the down position then use this
+        pass
 
+    def mousebutton_up(self, surface, event):
+        # If you need to do an action on mouse button while it's in the up position (after a down) then use this
+        pass
+
+    def invaded(self):
+        self.misc.draw_text("verdana", 63, "INVADED", (255, 255, 255), self.surface, 100, 100)
+        self.misc.draw_text("verdana", 63, "Your score: ", (255, 255, 255), self.surface, 100, 300)
+        self.misc.draw_text("verdana", 63, "miljoenen", (255, 255, 255), self.surface, 100, 500)
 
     def collision(self):
-        hits = pygame.sprite.groupcollide(enemies, bullets, True, True)
-        for hit in hits:
-            random.choice(explosion_sounds).play()
-            explosion = Explosion(hit.rect.center)
-            all_sprites.add(explosion)
-            player_score += Enemy.score
-            e = Enemy()
-            all_sprites.add(e)
-            enemies.add(e)
-
-        hits = pygame.sprite.groupcollide(enemies1, bullets, True, True)
-        for hit in hits:
-            random.choice(explosion_sounds).play()
-            explosion = Explosion(hit.rect.center)
-            all_sprites.add(explosion)
-            player_score += Enemy1.value
-            e1 = Enemy1()
-            all_sprites.add(e1)
-            enemies1.add(e1)
-
-        hits = pygame.sprite.groupcollide(enemies2, bullets, True, True)
-        for hit in hits:
-            random.choice(explosion_sounds).play()
-            explosion = Explosion(hit.rect.center)
-            all_sprites.add(explosion)
-            player_score += Enemy2.value
-            e2 = Enemy2()
-            all_sprites.add(e2)
-            enemies2.add(e2)
-
-        hits = pygame.sprite.groupcollide(enemies3, bullets, True, True)
-        for hit in hits:
-            random.choice(explosion_sounds).play()
-            explosion = Explosion(hit.rect.center)
-            all_sprites.add(explosion)
-            player_score += Enemy3.value
-            e3 = Enemy3()
-            all_sprites.add(e3)
-            enemies3.add(e3)
-
-        #   collision player-enemies
-        hits = pygame.sprite.spritecollide(player, enemies, False)
-        for hit in hits:
-            random.choice(explosion_sounds).play()
-            explosion = Explosion(hit.rect.center)
-            all_sprites.add(explosion)
-            print("                                                             hit")
-            dead = True
-            died()
-            # game_menu()
-        hits = pygame.sprite.spritecollide(player, enemies1, False)
-        for hit in hits:
-            random.choice(explosion_sounds).play()
-            explosion = Explosion(hit.rect.center)
-            all_sprites.add(explosion)
-            print("                                                             hit")
-            dead = True
-            died()
-            # game_menu()
-        hits = pygame.sprite.spritecollide(player, enemies2, False)
-        for hit in hits:
-            random.choice(explosion_sounds).play()
-            explosion = Explosion(hit.rect.center)
-            all_sprites.add(explosion)
-            print("                                                             hit")
-            dead = True
-            died()
-            # game_menu()
-        hits = pygame.sprite.spritecollide(player, enemies3, False)
-        for hit in hits:
-            random.choice(explosion_sounds).play()
-            explosion = Explosion(hit.rect.center)
-            all_sprites.add(explosion)
-            print("                                                             hit")
-            dead = True
-            died()
+        pass
 
     def key_up(self, key):
         # If you need to do an action on key inputs use this access key codes, check DRON.py for examples
         # For example: key A = keycode 97 so to check this do 'if key == 97'
         if key == 97 or key == 276:
             # "A" or arrow left key
-            self.Player.image = player.image_default
             self.Player.speedx = 0
+            self.Player.image = self.Player.image_stationary
         elif key == 100 or key == 275:
             # "D" or arrow right key
             self.Player.speedx = 0
+            self.Player.image = self.Player.image_stationary
 
     def key_down(self, key):
         if key == 97 or key == 276:
             # "A" or arrow left key
-            self.Player.image  = Player.player.image_2
-            self.Player.speedx =+ self.Player.added_speed
+            self.Player.image = self.Player.image_flying
+            self.Player.speedx = -self.Player.added_speed
         elif key == 100 or key == 275:
             # "D" or arrow right key
-            self.Player.image  = Player.player.image_2
-            self.Player.speedx =+ self.Player.added_speed
+            self.Player.image = self.Player.image_flying
+            self.Player.speedx = self.Player.added_speed
         elif key == 32:
+            self.sprite_group.add(Bullet(self.Player.rect.centerx, self.Player.rect.centery))
             self.Player.shoot()
 
     def stop_game(self):

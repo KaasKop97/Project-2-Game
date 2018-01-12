@@ -21,7 +21,7 @@ class Player (pygame.sprite.Sprite):
         self.game_height        =       int(self.conf.get_value("game", "height"))
         self.changeX            =       0
         self.dead               =       False
-        self.dodge_count        =       self.truck.dodged
+        #self.dodge_count        =       self.truck.dodged
 
     def update(self):
 
