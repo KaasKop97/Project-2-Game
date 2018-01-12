@@ -1,6 +1,6 @@
 from games.DRON import DRON
-#from games.Galaxy_Trespassers import Galaxy_Trespassers
-from games.race import Race
+from games.Galaxy_Trespassers import Galaxy_Trespassers
+from games.race import race
 from games.dodge_fangirls import dodge_fangirls
 from helpers import log_helper
 
@@ -13,29 +13,31 @@ class GameHandler:
 
         self.log = log_helper.LogHelper()
         self.DRON = DRON.Dron(self.surface)
-        #self.GT = Galaxy_Trespassers.ZoneTrespassers(self.surface)
-        self.race = Race.race(self.surface)
+        self.GT = Galaxy_Trespassers.GalaxyTrespassers(self.surface)
+        self.race = race.race(self.surface)
         self.DF = dodge_fangirls.DodgeFangirls(self.surface)
 
         self.game_names = [
             self.DRON.game_name,
-            #self.GT.game_name,
+            self.GT.game_name,
             self.race.game_name,
             self.DF.game_name
         ]
 
     def load_game(self, game_name):
         # This will load a specific game from the games directory
+        print(game_name)
         if game_name in self.game_names:
             self.loaded_game = game_name
             self.log.write_log("INFO", "GAME: " + self.loaded_game + " loaded.")
             if game_name == "DRON":
                 self.game = DRON.Dron(self.surface)
                 self.game.load()
-            elif game_name == "Zone Trespassers":
-                pass
+            elif game_name == "Galaxy Trespassers":
+                self.game = Galaxy_Trespassers.GalaxyTrespassers(self.surface)
+                self.game.load()
             elif game_name == "Race":
-                self.game = Race.race(self.surface)
+                self.game = race.race(self.surface)
                 self.game.load()
             elif game_name == "Dodge the Fangirls":
                 self.game = dodge_fangirls.DodgeFangirls(self.surface)
