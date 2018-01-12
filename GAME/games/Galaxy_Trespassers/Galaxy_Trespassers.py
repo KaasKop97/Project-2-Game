@@ -1,7 +1,7 @@
 import  pygame, sys, time, random, os, math
 from handlers import config_handler
-from games.Galaxy_Trespassers import player, enemy
-
+from helpers import misc_helper, log_helper
+from games.Galaxy_Trespassers import player, enemies, wall, bullet, explosion
 from games.Galaxy_Trespassers.bullet import Player
 from games.Galaxy_Trespassers.enemies import enemy00
 from games.Galaxy_Trespassers.enemies import enemy01
@@ -11,8 +11,7 @@ from games.Galaxy_Trespassers.bullet import Bullet
 from games.Galaxy_Trespassers.explosion import Explosion
 from games.Galaxy_Trespassers.wall import Wall
 
-from helpers import misc_helper, log_helper
-from handlers import config_handler
+
 class GalaxyTrespassers:
     def __init__(self, surface):
         self.game_name = "Galaxy_Trespassers"
@@ -45,8 +44,11 @@ class GalaxyTrespassers:
 
     def update(self):
         # This method gets called every frame so be careful with this one.
+        self.background = os.path.join("games", "Galaxy_Trespassers", "data", "bg1.png")
+        self.background_rect = self.background.get_rect()
         self.sprite_group.update()
         self.sprite_group.draw(self.gamedisplay)
+
 
     def game_menu(self):
         gamedisplay.blit(background, background_rect)
@@ -85,11 +87,91 @@ class GalaxyTrespassers:
         pygame.display.flip()
         time.sleep(4)
 
+
+    def collision(self):
+        hits = pygame.sprite.groupcollide(enemies, bullets, True, True)
+        for hit in hits:
+            random.choice(explosion_sounds).play()
+            explosion = Explosion(hit.rect.center)
+            all_sprites.add(explosion)
+            player_score += Enemy.score
+            e = Enemy()
+            all_sprites.add(e)
+            enemies.add(e)
+
+        hits = pygame.sprite.groupcollide(enemies1, bullets, True, True)
+        for hit in hits:
+            random.choice(explosion_sounds).play()
+            explosion = Explosion(hit.rect.center)
+            all_sprites.add(explosion)
+            player_score += Enemy1.value
+            e1 = Enemy1()
+            all_sprites.add(e1)
+            enemies1.add(e1)
+
+        hits = pygame.sprite.groupcollide(enemies2, bullets, True, True)
+        for hit in hits:
+            random.choice(explosion_sounds).play()
+            explosion = Explosion(hit.rect.center)
+            all_sprites.add(explosion)
+            player_score += Enemy2.value
+            e2 = Enemy2()
+            all_sprites.add(e2)
+            enemies2.add(e2)
+
+        hits = pygame.sprite.groupcollide(enemies3, bullets, True, True)
+        for hit in hits:
+            random.choice(explosion_sounds).play()
+            explosion = Explosion(hit.rect.center)
+            all_sprites.add(explosion)
+            player_score += Enemy3.value
+            e3 = Enemy3()
+            all_sprites.add(e3)
+            enemies3.add(e3)
+
+        #   collision player-enemies
+        hits = pygame.sprite.spritecollide(player, enemies, False)
+        for hit in hits:
+            random.choice(explosion_sounds).play()
+            explosion = Explosion(hit.rect.center)
+            all_sprites.add(explosion)
+            print("                                                             hit")
+            dead = True
+            died()
+            # game_menu()
+        hits = pygame.sprite.spritecollide(player, enemies1, False)
+        for hit in hits:
+            random.choice(explosion_sounds).play()
+            explosion = Explosion(hit.rect.center)
+            all_sprites.add(explosion)
+            print("                                                             hit")
+            dead = True
+            died()
+            # game_menu()
+        hits = pygame.sprite.spritecollide(player, enemies2, False)
+        for hit in hits:
+            random.choice(explosion_sounds).play()
+            explosion = Explosion(hit.rect.center)
+            all_sprites.add(explosion)
+            print("                                                             hit")
+            dead = True
+            died()
+            # game_menu()
+        hits = pygame.sprite.spritecollide(player, enemies3, False)
+        for hit in hits:
+            random.choice(explosion_sounds).play()
+            explosion = Explosion(hit.rect.center)
+            all_sprites.add(explosion)
+            print("                                                             hit")
+            dead = True
+            died()
+
     def key_up(self, key):
         # If you need to do an action on key inputs use this access key codes, check DRON.py for examples
         # For example: key A = keycode 97 so to check this do 'if key == 97'
         if key == 97 or key == 276:
             # "A" or arrow left key
+            self.Player.image = player.image_default
             self.Player.speedx = 0
         elif key == 100 or key == 275:
             # "D" or arrow right key
@@ -98,10 +180,14 @@ class GalaxyTrespassers:
     def key_down(self, key):
         if key == 97 or key == 276:
             # "A" or arrow left key
+            self.Player.image  = Player.player.image_2
             self.Player.speedx =+ self.Player.added_speed
         elif key == 100 or key == 275:
             # "D" or arrow right key
+            self.Player.image  = Player.player.image_2
             self.Player.speedx =+ self.Player.added_speed
+        elif key == 32:
+            self.Player.shoot()
 
     def stop_game(self):
         pass

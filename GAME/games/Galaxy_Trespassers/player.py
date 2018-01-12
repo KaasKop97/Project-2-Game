@@ -15,8 +15,8 @@ class Player(pygame.sprite.Sprite):
         self.image.set_colorkey(BLACK)
         self.image_2.set_colorkey(BLACK)
         self.rect           = self.image.get_rect()
-        self.rect.centerx   = WINDOW.get_width() / 2
-        self.rect.bottom    = HEIGHT - 20
+        self.rect.centerx   = gamedisplay.get_width() / 2
+        self.rect.bottom    = game_height - 20
         self.radius         = int(self.rect.width / 3)
         self.speedx         = 0
         self.added_speed    = 8.5
@@ -27,24 +27,9 @@ class Player(pygame.sprite.Sprite):
 
     def update(self):
         self.speedx = 0
-        keystate = pygame.key.get_pressed()
-        if keystate[pygame.K_LEFT]:
-            self.image  = player.image_2
-            self.speedx =- self.added_speed
-        if keystate[pygame.K_RIGHT]:
-            self.image  = player.image_2
-            self.speedx =+ self.added_speed
-            if keystate[pygame.K_a]:
-                self.image = player.image_2
-                self.speedx =- self.added_speed
-            if keystate[pygame.K_d]:
-                self.image = player.image_2
-                self.speedx =+ self.added_speed
-        if keystate[pygame.K_SPACE]:
-            self.shoot()
         self.rect.x += self.speedx
-        if self.rect.right > WIDTH:
-            self.rect.right = WIDTH
+        if self.rect.right > game_width:
+            self.rect.right = game_width
         if self.rect.left < 0:
             self.rect.left  = 0
 

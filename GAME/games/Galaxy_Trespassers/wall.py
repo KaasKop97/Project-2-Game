@@ -10,5 +10,5 @@ class Wall(pygame.sprite.Sprite):
         self.image = pygame.image.load(os.path.join(game_folder, 'WAll.png')).convert()
         self.image.set_colorkey(BLACK)
         self.rect = self.image.get_rect()
-        self.rect.centerx = WINDOW.get_width() / 2
-        self.rect.bottom = HEIGHT
+        self.rect.centerx = gamedisplay.get_width() / 2
+        self.rect.bottom = game_height
