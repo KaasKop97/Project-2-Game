@@ -28,6 +28,8 @@ class race:
     def load(self):
         self.misc.set_background(self.GameDisplay, os.path.join("games", "race", "data", "road2.png"))
         self.misc.play_music(os.path.join("games", "race", "data", "RDsound.wav"), -1)
+        self.misc.draw_text("freesanbold.ttf", 21, "Dodged:%d", (255, 255, 255), self.GameDisplay,
+                            self.X + (self.game_width / 2), self.Y + (self.game_height))
         return True
 
     def update(self):
@@ -44,8 +46,8 @@ class race:
         self.sprite_group.draw(self.GameDisplay)
 
         # def score (self):
-        # self.misc.draw_text("freesanbold.ttf", 21, "Dodged:%d", (255, 255, 255), self.GameDisplay,
-        # self.X +(self.game_width / 2), self.Y + (self.game_height))
+        #self.misc.draw_text("freesanbold.ttf", 21, "Dodged:%d", (255, 255, 255), self.GameDisplay,
+        #self.X +(self.game_width / 2), self.Y + (self.game_height))
 
 
         # textRect.center = ((x + (w / 2), y + (h / 2)))
