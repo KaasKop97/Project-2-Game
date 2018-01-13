@@ -14,17 +14,26 @@ class Bullet(pygame.sprite.Sprite):
         self.conf = config_handler.ConfigHandler()
         self.game_width = int(self.conf.get_value("game", "width"))
         self.game_height = int(self.conf.get_value("game", "height"))
-        self.image, self.rect = self.misc.load_image(os.path.join("games", "Galaxy_Trespassers", "data", "bullet.png"))
-        self.image.set_colorkey((0, 0, 0))
+        self.bullet, self.rect_bullet = self.misc.load_image(os.path.join("games", "Galaxy_Trespassers", "data", "bullet.png"))
+        self.explosion, self.rect_explosion = self.misc.load_image(os.path.join("games", "Galaxy_Trespassers", "data", "explosion.png"))
 
+        self.image = self.bullet
+        self.rect = self.rect_bullet
+
+        self.image.set_colorkey((0, 0, 0))
         self.rect.centerx = x
         self.rect.bottom = y
         self.speedy = -10
+        self.spawn_time = pygame.time.get_ticks()
+        self.hit = False
 
     def update(self):
         self.rect.y += self.speedy
-        if self.rect.bottom < 0:
-            print("BOOM BITCH")
 
-    def explode(self):
-        pass
+    def explode(self, center):
+        #self.tick_tock = pygame.time.get_ticks()
+        self.image = self.explosion
+        self.rect = self.rect_explosion
+        self.speedy = 0
+        self.rect.y = 0
+        self.rect.center = center

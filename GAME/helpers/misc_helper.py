@@ -50,3 +50,7 @@ class MiscHelper:
     @staticmethod
     def stop_music():
         pygame.mixer.music.fadeout(500)
+
+    def play_sound(self, soundfile):
+        sound = pygame.mixer.Sound(soundfile)
+        sound.play()

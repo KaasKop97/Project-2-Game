@@ -19,14 +19,4 @@ class Explosion(pygame.sprite.Sprite):
         self.image.set_colorkey((0, 0, 0))
 
         self.rect.center = center
-        self.frame = 0
-        self.last_update = pygame.time.get_ticks()
-        self.frame_rate = 60
 
-    def update(self):
-        pass
-        # now = pygame.time.get_ticks()
-        # if now - self.last_update > self.frame_rate:
-        #     self.last_update = now
-        #     self.frame += 1
-        #     self.kill()

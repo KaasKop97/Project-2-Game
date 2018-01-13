@@ -31,76 +31,43 @@ class GalaxyTrespassers:
                                          "enemy_ship_flying3.png"))
         self.enemy4 = Enemy(os.path.join("games", "Galaxy_Trespassers", "data",
                                          "enemy_ship_flying4.png"))
-        # self.wall = wall.Wall()
-        # self.explosion = explosion.Explosion()
+        self.bullet = None
+        self.explosion = None
+        self.Player.score = 0
+        self.wall = Wall()
         self.sprite_group = pygame.sprite.Group()
-        self.sprite_group.add(self.Player, self.enemy1, self.enemy2, self.enemy3,
-                              self.enemy4)  # , self.wall, self.bullet, self.explosion)
+        self.sprite_group.add(self.Player, self.enemy1, self.enemy2, self.enemy3, self.enemy4)
+        self.enemies = [self.enemy1, self.enemy2, self.enemy3, self.enemy4]
 
     def load(self):
-        try:
-            self.misc.set_background(self.surface, os.path.abspath("games/Galaxy_Trespassers/data/bg1.png"))
-            self.misc.play_music(os.path.join("games", "Galaxy_Trespassers" "data", "Galaxy_trespassers_theme.wav"), -1)
-        except pygame.error as e:
-            print("ERROR in load()")
-            return False
+
+        self.misc.set_background(self.surface, os.path.abspath("games/Galaxy_Trespassers/data/bg1.png"))
+        self.misc.play_music(os.path.abspath("games/Galaxy_Trespassers/data/Galaxy_trespassers_theme.wav"), -1)
+        self.sprite_group.add(self.wall)
         return True
 
     def update(self):
         # This method gets called every frame so be careful with this one.
         self.misc.set_background(self.surface, os.path.abspath("games/Galaxy_Trespassers/data/bg1.png"))
-        if self.sprite_group.has()
+        self.misc.draw_text("Verdana", 30, "Score: " + str(self.Player.killed), (255, 255, 255), self.surface, 100, 100)
+        if self.sprite_group.has(self.bullet):
+            if self.bullet.rect.bottom < 18:
+                self.sprite_group.remove(self.bullet)
+                self.bullet = None
+            elif self.bullet.hit and pygame.time.get_ticks() >= self.bullet.spawn_time + 1500:
+                self.sprite_group.remove(self.bullet)
+                self.bullet = None
+        self.collision()
         self.sprite_group.update()
         self.sprite_group.draw(self.surface)
 
-    def game_menu(self):
-        gamedisplay.blit(background, background_rect)
-        draw_text(gamedisplay, 'GALAXY TRESPASSERS', 63, game_width / 2, game_height / 6)
-        draw_text(gamedisplay, 'PRESS TAB TO CONTINUE', 40, game_width / 2, game_height / 2.57)
-        draw_text(gamedisplay, 'use WASD or arrow keys to move', 22, game_width / 2, game_height / 1.5)
-        draw_text(gamedisplay, 'tap or hold space to fire', 22, game_width / 2, game_height / 1.4)
-        draw_text(gamedisplay, 'press esc to quit game', 22, game_width / 2, game_height / 1.2)
-        pygame.display.flip()
-        waiting = True
-        while waiting:
-            clock.tick(FPS)
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    pygame.quit()
-                if event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_ESCAPE:
-                        pygame.quit()
-                elif event.type == pygame.KEYUP:
-                    if event.key == pygame.K_TAB:
-                        waiting = False
-
-    def died(self):
-        gamedisplay.blit(background, background_rect)
-        draw_text(gamedisplay, 'YOU HAVE DIED', 63, game_width / 2, game_height / 4.4)
-        draw_text(gamedisplay, 'your score:', 22, game_width / 2, game_height / 2.3)
-        draw_text(gamedisplay, str(player_score) + 'pts', 42, game_width / 2, game_height / 1.9)
-        pygame.display.flip()
-        time.sleep(4)
-
     def mousebutton_down(self, surface, event):
-        # If you need to do an action on mouse button while it's in the down position then use this
         pass
 
     def mousebutton_up(self, surface, event):
-        # If you need to do an action on mouse button while it's in the up position (after a down) then use this
-        pass
-
-    def invaded(self):
-        self.misc.draw_text("verdana", 63, "INVADED", (255, 255, 255), self.surface, 100, 100)
-        self.misc.draw_text("verdana", 63, "Your score: ", (255, 255, 255), self.surface, 100, 300)
-        self.misc.draw_text("verdana", 63, "miljoenen", (255, 255, 255), self.surface, 100, 500)
-
-    def collision(self):
         pass
 
     def key_up(self, key):
-        # If you need to do an action on key inputs use this access key codes, check DRON.py for examples
-        # For example: key A = keycode 97 so to check this do 'if key == 97'
         if key == 97 or key == 276:
             # "A" or arrow left key
             self.Player.speedx = 0
@@ -111,17 +78,67 @@ class GalaxyTrespassers:
             self.Player.image = self.Player.image_stationary
 
     def key_down(self, key):
-        if key == 97 or key == 276:
-            # "A" or arrow left key
-            self.Player.image = self.Player.image_flying
-            self.Player.speedx = -self.Player.added_speed
-        elif key == 100 or key == 275:
-            # "D" or arrow right key
-            self.Player.image = self.Player.image_flying
-            self.Player.speedx = self.Player.added_speed
-        elif key == 32:
-            self.sprite_group.add(Bullet(self.Player.rect.centerx, self.Player.rect.centery))
-            self.Player.shoot()
+        if not self.Player.dead:
+            if key == 97 or key == 276:
+                # "A" or arrow left key
+                self.Player.image = self.Player.image_flying
+                self.Player.speedx = -self.Player.added_speed
+            elif key == 100 or key == 275:
+                # "D" or arrow right key
+                self.Player.image = self.Player.image_flying
+                self.Player.speedx = self.Player.added_speed
+            elif key == 32:
+                if not self.sprite_group.has(self.bullet):
+                    self.misc.play_sound(
+                        os.path.join("games", "Galaxy_Trespassers", "data", "Laser_Gun_Sound_Effect.wav"))
+                    self.bullet = Bullet(self.Player.rect.centerx, self.Player.rect.centery)
+                    self.sprite_group.add(self.bullet)
 
     def stop_game(self):
-        pass
+        self.sprite_group.empty()
+        self.misc.stop_music()
+        self.Player = None
+        for x in range(len(self.enemies)):
+            self.enemies[x] = None
+            pygame.event.pump()
+        self.wall = None
+        self.bullet = None
+        self.explosion = None
+
+    def stop_moving(self):
+        for x in range(len(self.enemies)):
+            self.enemies[x].speedy = 0
+            pygame.event.pump()
+        self.Player.dead = True
+        self.Player.speedx = 0
+
+    def died(self):
+        self.explosion = Explosion(self.Player.rect.center)
+        self.sprite_group.add(self.explosion)
+        self.misc.draw_text("verdana", 63, "YOU DIED!", (255, 255, 255), self.surface, 100, 100)
+        self.misc.draw_text("verdana", 63, "Your score: ", (255, 255, 255), self.surface, 100, 300)
+        self.misc.draw_text("verdana", 63, "miljoenen", (255, 255, 255), self.surface, 200, 300)
+
+    def invaded(self):
+        self.misc.draw_text("verdana", 63, "INVADED", (255, 255, 255), self.surface, 100, 100)
+        self.misc.draw_text("verdana", 63, "Your score: ", (255, 255, 255), self.surface, 100, 300)
+        self.misc.draw_text("verdana", 63, "miljoenen", (255, 255, 255), self.surface, 400, 300)
+
+    def collision(self):
+        for x in range(len(self.enemies)):
+            # Player collision with the enemy
+            if self.enemies[x].rect.colliderect(self.Player.rect):
+                self.stop_moving()
+                self.died()
+
+            if self.enemies[x].rect.colliderect(self.wall.rect):
+                self.stop_moving()
+                self.invaded()
+
+            # Bullet collision with the enemy
+            if self.bullet and self.enemies[x].rect.colliderect(self.bullet.rect):
+                self.bullet.explode(self.enemies[x].rect.center)
+                self.bullet.hit = True
+                self.Player.killed += 100
+                self.enemies[x].reset_position()
+            pygame.event.pump()
