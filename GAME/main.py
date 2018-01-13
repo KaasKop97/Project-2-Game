@@ -31,11 +31,11 @@ class Main:
         while self.running:
             self.clock.tick(60)
             if not self.game_handler.loaded_game:
+                pygame.mouse.set_visible(True)
                 for event in pygame.event.get():
                     if event.type == pygame.MOUSEBUTTONDOWN:
                         button_pressed = self.menu.get_button_pressed(event.pos)
                         if not button_pressed == self.menu.currently_drawn:
-                            print(button_pressed)
                             if button_pressed == "PLAY":
                                 self.menu.draw_menu("PLAY")
                             elif button_pressed == "QUIT":
@@ -55,6 +55,7 @@ class Main:
                         print("Quitting")
                         self.running = False
             else:
+                pygame.mouse.set_visible(False)
                 self.menu.reset_menu()
                 self.game_handler.main_loop()
                 for event in pygame.event.get():

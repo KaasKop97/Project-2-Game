@@ -31,6 +31,6 @@ class Enemys(pygame.sprite.Sprite):
         if self.rect.y > self.game_height + 10:
             self.rect.x = random.randrange(0, self.game_width)
             self.rect.y = self.Y
-            self.speed += 3
+            self.speed += 1
             self.dodge_count += 1
             self.dodged = True
