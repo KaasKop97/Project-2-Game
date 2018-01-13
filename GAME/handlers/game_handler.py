@@ -26,7 +26,6 @@ class GameHandler:
 
     def load_game(self, game_name):
         # This will load a specific game from the games directory
-        print(game_name)
         if game_name in self.game_names:
             self.loaded_game = game_name
             self.log.write_log("INFO", "GAME: " + self.loaded_game + " loaded.")

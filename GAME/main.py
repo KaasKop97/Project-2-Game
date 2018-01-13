@@ -48,7 +48,6 @@ class Main:
                             elif button_pressed == "Race":
                                 self.game_handler.load_game("Race")
                             elif button_pressed == "Galaxy Trespassers":
-                                print("Loading GT")
                                 self.game_handler.load_game("Galaxy Trespassers")
                             else:
                                 print("ERROR: Can't load button since there is no definition for it.")

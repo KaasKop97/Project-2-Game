@@ -36,20 +36,18 @@ class GalaxyTrespassers:
         self.Player.score = 0
         self.wall = Wall()
         self.sprite_group = pygame.sprite.Group()
-        self.sprite_group.add(self.Player, self.enemy1, self.enemy2, self.enemy3, self.enemy4)
+        self.sprite_group.add(self.Player, self.wall, self.enemy1, self.enemy2, self.enemy3, self.enemy4)
         self.enemies = [self.enemy1, self.enemy2, self.enemy3, self.enemy4]
 
     def load(self):
 
         self.misc.set_background(self.surface, os.path.abspath("games/Galaxy_Trespassers/data/bg1.png"))
         self.misc.play_music(os.path.abspath("games/Galaxy_Trespassers/data/Galaxy_trespassers_theme.wav"), -1)
-        self.sprite_group.add(self.wall)
         return True
 
     def update(self):
         # This method gets called every frame so be careful with this one.
         self.misc.set_background(self.surface, os.path.abspath("games/Galaxy_Trespassers/data/bg1.png"))
-        self.misc.draw_text("Verdana", 30, "Score: " + str(self.Player.killed), (255, 255, 255), self.surface, 100, 100)
         if self.sprite_group.has(self.bullet):
             if self.bullet.rect.bottom < 18:
                 self.sprite_group.remove(self.bullet)
@@ -60,6 +58,7 @@ class GalaxyTrespassers:
         self.collision()
         self.sprite_group.update()
         self.sprite_group.draw(self.surface)
+        self.misc.draw_text("Verdana", 30, "Score: " + str(self.Player.killed), (255, 255, 255), self.surface, 100, 100)
 
     def mousebutton_down(self, surface, event):
         pass
@@ -90,7 +89,7 @@ class GalaxyTrespassers:
             elif key == 32:
                 if not self.sprite_group.has(self.bullet):
                     self.misc.play_sound(
-                        os.path.join("games", "Galaxy_Trespassers", "data", "Laser_Gun_Sound_Effect.wav"))
+                        os.path.join("games", "Galaxy_Trespassers", "data", "pew.wav"))
                     self.bullet = Bullet(self.Player.rect.centerx, self.Player.rect.centery)
                     self.sprite_group.add(self.bullet)
 
@@ -115,14 +114,14 @@ class GalaxyTrespassers:
     def died(self):
         self.explosion = Explosion(self.Player.rect.center)
         self.sprite_group.add(self.explosion)
-        self.misc.draw_text("verdana", 63, "YOU DIED!", (255, 255, 255), self.surface, 100, 100)
-        self.misc.draw_text("verdana", 63, "Your score: ", (255, 255, 255), self.surface, 100, 300)
-        self.misc.draw_text("verdana", 63, "miljoenen", (255, 255, 255), self.surface, 200, 300)
+        self.misc.draw_text("verdana", 63, "YOU DIED!", (255, 0, 0), self.surface, 300, 100)
+        self.misc.draw_text("verdana", 63, "Your score: " + str(self.Player.killed), (255, 255, 255), self.surface, 300,
+                            200)
 
     def invaded(self):
-        self.misc.draw_text("verdana", 63, "INVADED", (255, 255, 255), self.surface, 100, 100)
-        self.misc.draw_text("verdana", 63, "Your score: ", (255, 255, 255), self.surface, 100, 300)
-        self.misc.draw_text("verdana", 63, "miljoenen", (255, 255, 255), self.surface, 400, 300)
+        self.misc.draw_text("verdana", 63, "INVADED", (255, 0, 0), self.surface, 300, 100)
+        self.misc.draw_text("verdana", 63, "Your score: " + str(self.Player.killed), (255, 255, 255), self.surface, 300,
+                            200)
 
     def collision(self):
         for x in range(len(self.enemies)):
