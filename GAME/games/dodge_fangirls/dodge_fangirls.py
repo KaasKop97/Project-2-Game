@@ -7,7 +7,6 @@ import random
 from helpers import misc_helper
 
 
-
 class DodgeFangirls:
     def __init__(self, surface):
         self.game_name = "Dodge the Fangirls"
@@ -15,12 +14,8 @@ class DodgeFangirls:
         self.gamedisplay = surface
         self.conf = config_handler.ConfigHandler()
         self.misc = misc_helper.MiscHelper()
-        self.dodge_count = 0
         self.game_width = int(self.conf.get_value("game", "width"))
         self.game_height = int(self.conf.get_value("game", "height"))
-        self.Player = player.Player(self.game_width * 0.45, self.game_height * 0.9, 43, 55, os.path.join("games", "dodge_fangirls", "data", "cbCHARACTER.png"))
-        self.enemy4 = enemy.Enemys(random.randrange(0, self.game_width), -500, 196, 57,
-                                   os.path.join("games","dodge_fangirls", "data","OBSTACLE4.png"), 4)
         self.Player = player.Player(self.game_width * 0.45, self.game_height * 0.9, 43, 55,
                                     os.path.join("games", "dodge_fangirls", "data", "cbCHARACTER.png"))
         self.enemy4 = enemy.Enemys(random.randrange(0, self.game_width), -500, 196, 57,
@@ -35,20 +30,28 @@ class DodgeFangirls:
         self.sprite_group = pygame.sprite.Group()
         self.sprite_group.add(self.Player, self.enemy1, self.enemy2, self.enemy3, self.enemy4)
         self.enemies = [self.enemy1, self.enemy2, self.enemy3, self.enemy4]
-        self.enemiess = [self.enemy1.score, self.enemy2.score, self.enemy3.score, self.enemy4.score]
+        self.score = self.Player.score
 
     def load(self):
         # This is the first thing that's called, load stuff here. Must return a boolean!!
-        self.misc.set_background(self.gamedisplay, os.path.join("games", "dodge_fangirls", "data", "achtergrondfoto.png"))
+        self.misc.set_background(self.gamedisplay,
+                                 os.path.join("games", "dodge_fangirls", "data", "achtergrondfoto.png"))
         self.misc.play_music(os.path.join("games", "dodge_fangirls", "data", "loyal.mp3"), -1)
-
 
         return True
 
     def update(self):
         # This method gets called every frame so be careful with this one.
-        self.misc.set_background(self.gamedisplay, os.path.join("games", "dodge_fangirls", "data", "achtergrondfoto.png"))
-        self.misc.draw_text("verdana", 30, str(self.dodge_count), (255, 0, 0), self.gamedisplay, 10, 0)
+        self.misc.set_background(self.gamedisplay,
+                                 os.path.join("games", "dodge_fangirls", "data", "achtergrondfoto.png"))
+
+        for x in range(len(self.enemies)):
+            if self.enemies[x].dodged:
+                self.score = self.score + self.enemies[x].score
+                self.enemies[x].dodged = False
+            pygame.event.pump()
+
+        self.misc.draw_text("verdana", 30, "Score: " + str(self.score), (255, 255, 255), self.gamedisplay, 10, 0)
 
         for x in range(len(self.enemies)):
             if self.Player.rect.colliderect(self.enemies[x].rect):
@@ -59,11 +62,6 @@ class DodgeFangirls:
 
         self.sprite_group.update()
         self.sprite_group.draw(self.gamedisplay)
-
-        if self.enemy2.Y > self.game_height + 10:
-            self.dodge_count += self.score
-
-
 
     def mousebutton_down(self, surface, event):
         # If you need to do an action on mouse button while it's in the down position then use this
@@ -92,20 +90,20 @@ class DodgeFangirls:
             self.Player.changeX = 15
 
     def stop_game(self):
-        pass
-
-
-    def die(self):
-        self.misc.draw_text("verdana", 50, "CRASHED", (255, 0, 0), self.gamedisplay, self.game_width//2.5, self.game_height//2  )
-        self.misc.draw_text("freesanbold.ttf", 30, "Press ESC to play another game", (255, 0, 0), self.gamedisplay,
-                            250, 0)
-
+        self.sprite_group.empty()
         for x in range(len(self.enemies)):
-            self.enemies[x].speed = 0
-
-
-        self.Player.changeX = 0
-
+            self.enemies[x] = None
+            pygame.event.pump()
+        self.Player = None
         self.misc.stop_music()
 
+    def die(self):
+        # self.misc.draw_text("verdana", 50, "CRASHED", (255, 0, 0), self.gamedisplay, self.game_width // 2.5,
+        #                     self.game_height // 2)
+        # self.misc.draw_text("freesanbold.ttf", 30, "Press ESC to play another game", (255, 0, 0), self.gamedisplay,
+        #                     250, 0)
+        self.misc.game_over(str(self.score), self.gamedisplay, "You bumped into an ex", "verdana", 20, (255, 255, 255))
 
+        self.sprite_group.empty()
+
+        self.misc.stop_music()

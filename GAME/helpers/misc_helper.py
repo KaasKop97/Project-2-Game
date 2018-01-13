@@ -7,6 +7,8 @@ from handlers import config_handler
 class MiscHelper:
     def __init__(self):
         self.config = config_handler.ConfigHandler()
+        self.game_width = int(self.config.get_value("game", "width"))
+        self.game_height = int(self.config.get_value("game", "height"))
         self.font = pygame.font.init()
 
     @staticmethod
@@ -17,8 +19,7 @@ class MiscHelper:
 
     def set_background(self, surface, image):
         bg_img = pygame.image.load(image)
-        bg_img = pygame.transform.scale(bg_img, (
-            int(self.config.get_value("game", "width")), int(self.config.get_value("game", "height"))))
+        bg_img = pygame.transform.scale(bg_img, (self.game_width, self.game_height))
         image_rect = bg_img.get_rect()
 
         surface.blit(bg_img, image_rect)
@@ -27,8 +28,7 @@ class MiscHelper:
         if not type(rectangle) is pygame.Rect:
             raise TypeError("Error, given argument is not of type 'pygame.Rect'")
 
-        if rectangle[0] >= int(self.config.get_value("game", "width")) or rectangle[0] <= 0 or rectangle[1] >= int(
-                self.config.get_value("game", "height")) or rectangle[1] <= 0:
+        if rectangle[0] >= self.game_width - rectangle.width or rectangle[0] <= 0 or rectangle[1] >= self.game_height or rectangle[1] <= 0:
             return True
         else:
             return False
@@ -41,6 +41,14 @@ class MiscHelper:
         text = self.font.render(text, 1, (colour))
         surface.blit(text, (x, y))
 
+    def game_over(self, score, surface, additional_text="", additional_text_font="", additional_text_size=0,
+                  additional_text_colour=(0, 0, 0)):
+        self.set_background(surface, os.path.join("menu", "game_over.jpg"))
+        self.draw_text("verdana", 20, "Your score: " + str(score), (255, 255, 255), surface, 100, 100)
+        if not additional_text == "":
+            self.draw_text(str(additional_text_font), int(additional_text_size), str(additional_text),
+                           additional_text_colour, surface, self.game_width // 2, self.game_height - 100)
+
     @staticmethod
     def play_music(soundfile, loop):
         pygame.mixer.init()
@@ -50,3 +58,8 @@ class MiscHelper:
     @staticmethod
     def stop_music():
         pygame.mixer.music.fadeout(500)
+
+    @staticmethod
+    def play_sound(soundfile):
+        sound = pygame.mixer.Sound(soundfile)
+        sound.play()

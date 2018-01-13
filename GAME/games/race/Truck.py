@@ -22,21 +22,14 @@ class Truck(pygame.sprite.Sprite):
         self.conf                   = config_handler.ConfigHandler()
         self.game_width             = int(self.conf.get_value("game", "width"))
         self.game_height            = int(self.conf.get_value("game", "height"))
-        self.score                  = score
-        self.dodge_count            = score
+        self.dodge_count = 0
 
     def update(self):
-        print()
+        self.rect.move_ip(0, self.speed)
+
         if self.rect.y > self.game_height + 10:
             self.rect.x = random.randrange(0, self.game_width)
             self.rect.y = -30
             self.speed += 0.5
-            self.dodge_count = self.score
+            self.dodge_count += 1
 
-
-        #if self.truck > self.game_height:
-            #self.dodged += 1
-
-
-        print(self.rect.y)
-        self.rect.move_ip(0, self.speed)

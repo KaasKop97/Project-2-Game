@@ -2,6 +2,7 @@ import pygame
 from handlers import config_handler
 from helpers import misc_helper
 
+
 class Player(pygame.sprite.Sprite):
     def __init__(self, x, y, w, h, img):
         pygame.sprite.Sprite.__init__(self)
@@ -19,10 +20,7 @@ class Player(pygame.sprite.Sprite):
         self.game_height = int(self.conf.get_value("game", "height"))
         self.changeX = 0
         self.misc = misc_helper.MiscHelper()
-        self.counts = 0
-
+        self.score = 0
 
     def update(self):
         self.rect.move_ip(self.changeX, 0)
-
-

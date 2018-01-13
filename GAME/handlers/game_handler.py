@@ -1,9 +1,5 @@
 from games.DRON import DRON
-<<<<<<< HEAD
-#from games.Galaxy_Trespassers import Galaxy_Trespassers
-=======
 from games.Galaxy_Trespassers import Galaxy_Trespassers
->>>>>>> 2b0ee0e411bd7ad65d7e7832f1953d27bf57ae28
 from games.race import race
 from games.dodge_fangirls import dodge_fangirls
 from helpers import log_helper
@@ -17,11 +13,7 @@ class GameHandler:
 
         self.log = log_helper.LogHelper()
         self.DRON = DRON.Dron(self.surface)
-<<<<<<< HEAD
-        #self.GT = Galaxy_Trespassers.ZoneTrespassers(self.surface)
-=======
         self.GT = Galaxy_Trespassers.GalaxyTrespassers(self.surface)
->>>>>>> 2b0ee0e411bd7ad65d7e7832f1953d27bf57ae28
         self.race = race.race(self.surface)
         self.DF = dodge_fangirls.DodgeFangirls(self.surface)
 
@@ -34,7 +26,6 @@ class GameHandler:
 
     def load_game(self, game_name):
         # This will load a specific game from the games directory
-        print(game_name)
         if game_name in self.game_names:
             self.loaded_game = game_name
             self.log.write_log("INFO", "GAME: " + self.loaded_game + " loaded.")
