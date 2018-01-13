@@ -1,9 +1,12 @@
 import pygame
 import os
 from handlers import config_handler
-from games.dodge_fangirls import player, enemy
+from games.dodge_fangirls import player
+from games.dodge_fangirls import enemy
 import random
 from helpers import misc_helper
+
+
 
 class DodgeFangirls:
     def __init__(self, surface):
@@ -12,6 +15,7 @@ class DodgeFangirls:
         self.gamedisplay = surface
         self.conf = config_handler.ConfigHandler()
         self.misc = misc_helper.MiscHelper()
+        self.dodge_count = 0
         self.game_width = int(self.conf.get_value("game", "width"))
         self.game_height = int(self.conf.get_value("game", "height"))
         self.Player = player.Player(self.game_width * 0.45, self.game_height * 0.9, 43, 55, os.path.join("games", "dodge_fangirls", "data", "cbCHARACTER.png"))
@@ -31,16 +35,20 @@ class DodgeFangirls:
         self.sprite_group = pygame.sprite.Group()
         self.sprite_group.add(self.Player, self.enemy1, self.enemy2, self.enemy3, self.enemy4)
         self.enemies = [self.enemy1, self.enemy2, self.enemy3, self.enemy4]
+        self.enemiess = [self.enemy1.score, self.enemy2.score, self.enemy3.score, self.enemy4.score]
 
-    def load(self, surface):
+    def load(self):
         # This is the first thing that's called, load stuff here. Must return a boolean!!
         self.misc.set_background(self.gamedisplay, os.path.join("games", "dodge_fangirls", "data", "achtergrondfoto.png"))
-        self.misc.play_music(os.path.join("games", "dodge_fangirls", "data", "loyal.mp3"))
+        self.misc.play_music(os.path.join("games", "dodge_fangirls", "data", "loyal.mp3"), -1)
+
+
         return True
 
     def update(self):
         # This method gets called every frame so be careful with this one.
         self.misc.set_background(self.gamedisplay, os.path.join("games", "dodge_fangirls", "data", "achtergrondfoto.png"))
+        self.misc.draw_text("verdana", 30, str(self.dodge_count), (255, 0, 0), self.gamedisplay, 10, 0)
 
         for x in range(len(self.enemies)):
             if self.Player.rect.colliderect(self.enemies[x].rect):
@@ -52,8 +60,9 @@ class DodgeFangirls:
         self.sprite_group.update()
         self.sprite_group.draw(self.gamedisplay)
 
-        # if self.Y > self.game_height:
-        #     self.count()
+        if self.enemy2.Y > self.game_height + 10:
+            self.dodge_count += self.score
+
 
 
     def mousebutton_down(self, surface, event):
@@ -88,6 +97,8 @@ class DodgeFangirls:
 
     def die(self):
         self.misc.draw_text("verdana", 50, "CRASHED", (255, 0, 0), self.gamedisplay, self.game_width//2.5, self.game_height//2  )
+        self.misc.draw_text("freesanbold.ttf", 30, "Press ESC to play another game", (255, 0, 0), self.gamedisplay,
+                            250, 0)
 
         for x in range(len(self.enemies)):
             self.enemies[x].speed = 0
@@ -97,5 +108,4 @@ class DodgeFangirls:
 
         self.misc.stop_music()
 
-    # def count (self):
-    #     self.misc.draw_text("verdana",10,"dodged:" + str(self.Player.dodged) + str(self.Enemys.score), (255,255,255), self.gamedisplay, 350, 350)
+

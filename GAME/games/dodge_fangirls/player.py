@@ -19,7 +19,7 @@ class Player(pygame.sprite.Sprite):
         self.game_height = int(self.conf.get_value("game", "height"))
         self.changeX = 0
         self.misc = misc_helper.MiscHelper()
-
+        self.counts = 0
 
 
     def update(self):
