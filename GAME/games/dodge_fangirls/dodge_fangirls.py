@@ -93,14 +93,12 @@ class DodgeFangirls:
         pass
 
     def die(self):
-        self.misc.draw_text("verdana", 50, "CRASHED", (255, 0, 0), self.gamedisplay, self.game_width // 2.5,
-                            self.game_height // 2)
-        self.misc.draw_text("freesanbold.ttf", 30, "Press ESC to play another game", (255, 0, 0), self.gamedisplay,
-                            250, 0)
+        # self.misc.draw_text("verdana", 50, "CRASHED", (255, 0, 0), self.gamedisplay, self.game_width // 2.5,
+        #                     self.game_height // 2)
+        # self.misc.draw_text("freesanbold.ttf", 30, "Press ESC to play another game", (255, 0, 0), self.gamedisplay,
+        #                     250, 0)
+        self.misc.game_over(str(self.score), self.gamedisplay, "You bumped into an ex", "verdana", 20, (255, 255, 255))
 
-        for x in range(len(self.enemies)):
-            self.enemies[x].speed = 0
-
-        self.Player.changeX = 0
+        self.sprite_group.empty()
 
         self.misc.stop_music()

@@ -23,14 +23,13 @@ class Enemy(pygame.sprite.Sprite):
         self.radius = int(self.rect.width / 3)
         self.rect.x = random.randrange(0, self.game_width - self.rect.width)
         self.rect.y = random.randrange(-600, -100)
-        self.speedy = 1
+        self.speedy = 2
         Enemy.score = 50
 
     def update(self):
         self.rect.y += self.speedy
         if self.rect.top > self.game_height + 10:
             self.reset_position()
-            self.speedy += 0.3
 
     def reset_position(self):
         self.rect.x = random.randrange(0, self.game_width - self.rect.width)

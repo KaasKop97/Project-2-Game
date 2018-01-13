@@ -41,6 +41,14 @@ class MiscHelper:
         text = self.font.render(text, 1, (colour))
         surface.blit(text, (x, y))
 
+    def game_over(self, score, surface, additional_text="", additional_text_font="", additional_text_size=0,
+                  additional_text_colour=(0, 0, 0)):
+        self.set_background(surface, os.path.join("menu", "game_over.jpg"))
+        self.draw_text("verdana", 10, score, (255, 255, 255), surface, 100, 100)
+        if not additional_text == "":
+            self.draw_text(str(additional_text_font), int(additional_text_size), str(additional_text),
+                           additional_text_colour, surface, 400, 200)
+
     @staticmethod
     def play_music(soundfile, loop):
         pygame.mixer.init()
@@ -51,6 +59,7 @@ class MiscHelper:
     def stop_music():
         pygame.mixer.music.fadeout(500)
 
-    def play_sound(self, soundfile):
+    @staticmethod
+    def play_sound(soundfile):
         sound = pygame.mixer.Sound(soundfile)
         sound.play()

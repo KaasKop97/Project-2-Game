@@ -78,4 +78,7 @@ class race:
                 self.player.changeX = 5
 
     def stop_game(self):
-        pass
+        self.misc.stop_music()
+        self.sprite_group.empty()
+        self.player = None
+        self.truck = None
