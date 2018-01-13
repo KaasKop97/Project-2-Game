@@ -11,7 +11,7 @@ class MenuHelper:
         self.main_menu_items = ["PLAY", "SETTINGS", "QUIT"]
         self.game_names = [
             "DRON",
-            "Galaxy Trespasser",
+            "Galaxy Trespassers",
             "Race",
             "Dodge the Fangirls"
         ]
