@@ -90,7 +90,12 @@ class DodgeFangirls:
             self.Player.changeX = 15
 
     def stop_game(self):
-        pass
+        self.sprite_group.empty()
+        for x in range(len(self.enemies)):
+            self.enemies[x] = None
+            pygame.event.pump()
+        self.Player = None
+        self.misc.stop_music()
 
     def die(self):
         # self.misc.draw_text("verdana", 50, "CRASHED", (255, 0, 0), self.gamedisplay, self.game_width // 2.5,
