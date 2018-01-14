@@ -13,16 +13,16 @@ class MiscHelper:
 
     @staticmethod
     def load_image(image):
-        image = pygame.image.load(os.path.join(image))
+        image = pygame.image.load(os.path.join(image)).convert_alpha()
         image_rect = image.get_rect()
         return image, image_rect
 
     def set_background(self, surface, image):
-        bg_img = pygame.image.load(image)
+        bg_img = pygame.image.load(image).convert()
         bg_img = pygame.transform.scale(bg_img, (self.game_width, self.game_height))
         image_rect = bg_img.get_rect()
-
-        surface.blit(bg_img, image_rect)
+        return bg_img
+        #surface.blit(bg_img, image_rect)
 
     def is_out_of_bounds(self, rectangle):
         if not type(rectangle) is pygame.Rect:

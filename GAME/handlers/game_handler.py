@@ -12,16 +12,23 @@ class GameHandler:
         self.surface = surface
 
         self.log = log_helper.LogHelper()
-        self.DRON = DRON.Dron(self.surface)
-        self.GT = Galaxy_Trespassers.GalaxyTrespassers(self.surface)
-        self.race = race.race(self.surface)
-        self.DF = dodge_fangirls.DodgeFangirls(self.surface)
+        # self.DRON = DRON.Dron(self.surface)
+        # self.GT = Galaxy_Trespassers.GalaxyTrespassers(self.surface)
+        # self.race = race.race(self.surface)
+        # self.DF = dodge_fangirls.DodgeFangirls(self.surface)
+        #
+        # self.game_names = [
+        #     self.DRON.game_name,
+        #     self.GT.game_name,
+        #     self.race.game_name,
+        #     self.DF.game_name
+        # ]
 
         self.game_names = [
-            self.DRON.game_name,
-            self.GT.game_name,
-            self.race.game_name,
-            self.DF.game_name
+            "DRON",
+            "Galaxy Trespassers",
+            "Race",
+            "Dodge the Fangirls"
         ]
 
     def load_game(self, game_name):
@@ -45,7 +52,10 @@ class GameHandler:
                 print("Game does not exist")
 
     def main_loop(self):
-        self.game.update()
+        try:
+            self.game.update()
+        except AttributeError as e:
+            self.log.write_log("ERROR", "update error: " + str(e))
 
     def mousebutton_down(self, event):
         try:
