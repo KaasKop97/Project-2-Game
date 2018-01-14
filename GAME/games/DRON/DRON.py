@@ -27,9 +27,12 @@ class Dron:
 
         self.sprite_group = pygame.sprite.Group()
         self.sprite_group.add(self.bike, self.opponent)
+        self.score = len(self.bike.line)
 
     def update(self):
-        self.surface.blit(self.bg, (0, 0))
+        self.surface.fill((0, 0, 0))
+        self.score = len(self.bike.line)
+        self.misc.draw_text("Verdana", 20, "Score: " + str(self.score), (255, 255, 255), self.surface, 10, 10)
         if self.bike.dead:
             self.player_dead()
         elif self.opponent.dead:
@@ -130,12 +133,12 @@ class Dron:
     def victory(self):
         self.bike.direction = 4
         self.opponent.direction = 4
-        self.misc.draw_text("Inconsolate", 80, "You've won! Press R to retry", (0, 255, 0), self.surface, 50, 50)
+        self.misc.draw_text("Inconsolate", 30, "You've won! Press R to retry, or press ESC to quit.", (255, 255, 255), self.surface, self.game_width // 2 - 250, self.game_height // 2)
 
     def player_dead(self):
         self.bike.direction = 4
         self.opponent.direction = 4
-        self.misc.draw_text("Inconsolate", 80, "You're dead! Press R to retry.", (255, 0, 0), self.surface, 50, 50)
+        self.misc.draw_text("Inconsolate", 30, "You're dead! Press R to retry, or press ESC to quit.", (255, 255, 255), self.surface, self.game_width // 2 - 250, self.game_height // 2)
 
     def restart_game(self):
         self.misc.stop_music()

@@ -47,10 +47,12 @@ class MiscHelper:
             self.bg, self.bg_rect = self.load_background(os.path.join("menu", "game_over.jpg"))
         else:
             surface.blit(self.bg, (0, 0))
-        self.draw_text("verdana", 20, "Your score: " + str(score), (255, 255, 255), surface, self.game_width // 2 - 200, self.game_height - 50)
+        self.draw_text("verdana", 20, "Your score: " + str(score), (255, 255, 255), surface, self.game_width // 2 - 250, self.game_height - 100)
+        self.draw_text("verdana", 20, "Press ESC to quit.", (255, 255, 255), surface, self.game_width // 2 - 250, self.game_height - 50)
+
         if not additional_text == "":
             self.draw_text(str(additional_text_font), int(additional_text_size), str(additional_text),
-                           additional_text_colour, surface, self.game_width // 2 - 200, self.game_height - 100)
+                           additional_text_colour, surface, self.game_width // 2 - 250, self.game_height - 150)
 
     @staticmethod
     def play_music(soundfile, loop):
