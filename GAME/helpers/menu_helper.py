@@ -20,11 +20,13 @@ class MenuHelper:
         self.currently_drawn = ""
 
         self.font = pygame.font.init()
-        self.font = pygame.font.SysFont("Inconsolata", 15)
+        self.font = pygame.font.SysFont("Verdana", 15)
 
         self.surface = surface
         self.conf = config_handler.ConfigHandler()
         self.misc = misc_helper.MiscHelper()
+
+        self.bg, self.bg_rect = self.misc.load_background(os.path.join("menu", "background.jpg"))
 
     def create_button(self, text, x, y, width, height, text_colour, rect_colour=(66, 66, 66)):
         rect = pygame.draw.rect(
@@ -45,7 +47,8 @@ class MenuHelper:
 
     def draw_menu(self, menu_name):
         self.reset_menu()
-        self.misc.set_background(self.surface, os.path.join(os.getcwd(), "menu", "background.jpg"))
+        # self.misc.set_background(self.surface, os.path.join(os.getcwd(), "menu", "background.jpg"))
+        self.surface.blit(self.bg, (0, 0))
 
         if menu_name == self.currently_drawn:
             return False
@@ -66,7 +69,6 @@ class MenuHelper:
         for key, value in self.rectangles.items():
             try:
                 if value.collidepoint(hover_pos[0], hover_pos[1]):
-                    print(key)
                     if key == "DRON":
                         hover_author = "Game made by: Mitchel"
                         display_text_hover = "Controls: WASD or the arrow keys. Press R to rety."

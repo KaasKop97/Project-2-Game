@@ -14,26 +14,28 @@ class race:
         self.author = "Amanpreet Singh"
         self.GameDisplay = surface
         self.conf = config_handler.ConfigHandler()
+        self.misc = misc_helper.MiscHelper()
+
         self.game_width = int(self.conf.get_value("game", "width"))
         self.game_height = int(self.conf.get_value("game", "height"))
+        self.bg, self.bg_rect = self.misc.load_background(os.path.join("games", "race", "data", "road2.png"))
+
         self.player = Player.Player(self.game_width * 0.45, self.game_height - 100, 43, 55,
                                     os.path.join("games", "race", "data", "car.png"))
         self.truck = Truck.Truck(random.randrange(0, self.game_width), -50, 196, 57,
                                  os.path.join("games", "race", "data", "Truckobstacle.png"), 1)
         self.sprite_group = pygame.sprite.Group()
         self.sprite_group.add(self.player, self.truck)
-        self.misc = misc_helper.MiscHelper()
 
     def load(self):
-        self.misc.set_background(self.GameDisplay, os.path.join("games", "race", "data", "road2.png"))
         self.misc.play_music(os.path.join("games", "race", "data", "RDsound.wav"), -1)
 
         return True
 
     def update(self):
+        self.GameDisplay.blit(self.bg, (0, 0))
         self.player.score = self.truck.dodge_count
         self.sprite_group.update()
-        self.misc.set_background(self.GameDisplay, os.path.join("games", "race", "data", "road2.png"))
 
         if self.truck.rect.colliderect(self.player.rect):
             self.dead()

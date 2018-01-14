@@ -21,10 +21,7 @@ class GalaxyTrespassers:
         self.misc = misc_helper.MiscHelper()
         self.game_width = int(self.conf.get_value("game", "width"))
         self.game_height = int(self.conf.get_value("game", "height"))
-
-        self.bg = self.misc.set_background(self.surface, os.path.abspath("games/Galaxy_Trespassers/data/bg1.png"))
-
-        print(type(self.bg))
+        self.bg, self.bg_rect = self.misc.load_background(os.path.join(os.getcwd(), "games", "Galaxy_Trespassers", "data", "bg1.png"))
 
         self.Player = Player()
         self.enemy1 = Enemy(os.path.join("games", "Galaxy_Trespassers", "data",
@@ -44,12 +41,13 @@ class GalaxyTrespassers:
         self.enemies = [self.enemy1, self.enemy2, self.enemy3, self.enemy4]
 
     def load(self):
-        self.misc.set_background(self.surface, os.path.abspath("games/Galaxy_Trespassers/data/bg1.png"))
+        self.surface.blit(self.bg, (0, 0))
         self.misc.play_music(os.path.abspath("games/Galaxy_Trespassers/data/Galaxy_trespassers_theme.wav"), -1)
         return True
 
     def update(self):
         # This method gets called every frame so be careful with this one.
+        self.surface.blit(self.bg, (0, 0))
         if self.sprite_group.has(self.bullet):
             if self.bullet.rect.bottom < 18:
                 self.sprite_group.remove(self.bullet)
@@ -58,7 +56,6 @@ class GalaxyTrespassers:
                 self.sprite_group.remove(self.bullet)
                 self.bullet = None
         self.collision()
-        self.surface.blit(self.bg, (0, 0))
         self.sprite_group.update()
         self.sprite_group.draw(self.surface)
         self.misc.draw_text("Verdana", 30, "Score: " + str(self.Player.killed), (255, 255, 255), self.surface, 100, 100)

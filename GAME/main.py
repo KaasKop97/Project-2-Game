@@ -1,8 +1,7 @@
 import pygame
-import os
 
 from handlers import config_handler, game_handler
-from helpers import menu_helper, log_helper, misc_helper
+from helpers import menu_helper, log_helper
 
 
 class Main:

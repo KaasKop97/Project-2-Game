@@ -16,6 +16,8 @@ class DodgeFangirls:
         self.misc = misc_helper.MiscHelper()
         self.game_width = int(self.conf.get_value("game", "width"))
         self.game_height = int(self.conf.get_value("game", "height"))
+        self.bg, self.bg_rect = self.misc.load_background(
+            os.path.join("games", "dodge_fangirls", "data", "achtergrondfoto.png"))
         self.Player = player.Player(self.game_width * 0.45, self.game_height * 0.9, 43, 55,
                                     os.path.join("games", "dodge_fangirls", "data", "cbCHARACTER.png"))
         self.enemy4 = enemy.Enemys(random.randrange(0, self.game_width), -500, 196, 57,
@@ -34,17 +36,13 @@ class DodgeFangirls:
 
     def load(self):
         # This is the first thing that's called, load stuff here. Must return a boolean!!
-        self.misc.set_background(self.gamedisplay,
-                                 os.path.join("games", "dodge_fangirls", "data", "achtergrondfoto.png"))
         self.misc.play_music(os.path.join("games", "dodge_fangirls", "data", "loyal.mp3"), -1)
 
         return True
 
     def update(self):
         # This method gets called every frame so be careful with this one.
-        self.misc.set_background(self.gamedisplay,
-                                 os.path.join("games", "dodge_fangirls", "data", "achtergrondfoto.png"))
-
+        self.gamedisplay.blit(self.bg, (0, 0))
         for x in range(len(self.enemies)):
             if self.enemies[x].dodged:
                 self.score = self.score + self.enemies[x].score
@@ -102,7 +100,8 @@ class DodgeFangirls:
         #                     self.game_height // 2)
         # self.misc.draw_text("freesanbold.ttf", 30, "Press ESC to play another game", (255, 0, 0), self.gamedisplay,
         #                     250, 0)
-        self.misc.game_over(str(self.score), self.gamedisplay, "Cause of death: You bumped into an ex", "verdana", 20, (255, 255, 255))
+        self.misc.game_over(str(self.score), self.gamedisplay, "Cause of death: You bumped into an ex", "verdana", 20,
+                            (255, 255, 255))
 
         self.sprite_group.empty()
 

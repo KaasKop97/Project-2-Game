@@ -9,6 +9,7 @@ class MiscHelper:
         self.config = config_handler.ConfigHandler()
         self.game_width = int(self.config.get_value("game", "width"))
         self.game_height = int(self.config.get_value("game", "height"))
+        self.bg, self.bg_rect = None, None
         self.font = pygame.font.init()
 
     @staticmethod
@@ -17,12 +18,11 @@ class MiscHelper:
         image_rect = image.get_rect()
         return image, image_rect
 
-    def set_background(self, surface, image):
+    def load_background(self, image):
         bg_img = pygame.image.load(image).convert()
         bg_img = pygame.transform.scale(bg_img, (self.game_width, self.game_height))
-        image_rect = bg_img.get_rect()
-        return bg_img
-        #surface.blit(bg_img, image_rect)
+        bg_rect = bg_img.get_rect()
+        return bg_img, bg_rect
 
     def is_out_of_bounds(self, rectangle):
         if not type(rectangle) is pygame.Rect:
@@ -43,7 +43,10 @@ class MiscHelper:
 
     def game_over(self, score, surface, additional_text="", additional_text_font="", additional_text_size=0,
                   additional_text_colour=(0, 0, 0)):
-        self.set_background(surface, os.path.join("menu", "game_over.jpg"))
+        if not self.bg:
+            self.bg, self.bg_rect = self.load_background(os.path.join("menu", "game_over.jpg"))
+        else:
+            surface.blit(self.bg, (0, 0))
         self.draw_text("verdana", 20, "Your score: " + str(score), (255, 255, 255), surface, self.game_width // 2 - 200, self.game_height - 50)
         if not additional_text == "":
             self.draw_text(str(additional_text_font), int(additional_text_size), str(additional_text),

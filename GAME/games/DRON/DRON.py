@@ -21,6 +21,7 @@ class Dron:
         self.misc = misc_helper.MiscHelper()
         self.log = log_helper.LogHelper()
 
+        self.bg, self.bg_rect = self.misc.load_background(os.path.abspath("games/DRON/data/floor_small.png"))
         self.bike = MotorBike((20, self.game_height // 2), 1, (255, 0, 0), self.surface)
         self.opponent = MotorBike((self.game_width - 50, self.game_height // 2), 3, (0, 255, 0), self.surface)
 
@@ -28,7 +29,7 @@ class Dron:
         self.sprite_group.add(self.bike, self.opponent)
 
     def update(self):
-        self.misc.set_background(self.surface, os.path.abspath("games/DRON/data/floor_small.png"))
+        self.surface.blit(self.bg, (0, 0))
         if self.bike.dead:
             self.player_dead()
         elif self.opponent.dead:
@@ -42,7 +43,6 @@ class Dron:
 
     def load(self):
         try:
-            self.misc.set_background(self.surface, os.path.abspath("games/DRON/data/floor_small.png"))
             self.misc.play_music(os.path.abspath("games/DRON/data/music.ogg"), 0)
         except pygame.error as e:
             self.log.write_log("ERROR", "Something died fix it you idiot: " + str(e))
