@@ -28,8 +28,7 @@ class MiscHelper:
         if not type(rectangle) is pygame.Rect:
             raise TypeError("Error, given argument is not of type 'pygame.Rect'")
 
-        if rectangle[0] >= self.game_width - rectangle.width or rectangle[0] <= 0 or rectangle[1] >= self.game_height or \
-                rectangle[1] <= 0:
+        if rectangle[0] >= self.game_width - rectangle.width or rectangle[0] <= 0 or rectangle[1] >= self.game_height or rectangle[1] <= 0:
             return True
         else:
             return False
@@ -45,11 +44,10 @@ class MiscHelper:
     def game_over(self, score, surface, additional_text="", additional_text_font="", additional_text_size=0,
                   additional_text_colour=(0, 0, 0)):
         self.set_background(surface, os.path.join("menu", "game_over.jpg"))
-        self.draw_text("verdana", 20, "Your score: " + str(score), (255, 255, 255), surface, self.game_width // 2 - 150,
-                       self.game_height - 100)
-        if not additional_text == "" and not additional_text_font == "" and not additional_text_size == "":
+        self.draw_text("verdana", 20, "Your score: " + str(score), (255, 255, 255), surface, self.game_width // 2 - 200, self.game_height - 50)
+        if not additional_text == "":
             self.draw_text(str(additional_text_font), int(additional_text_size), str(additional_text),
-                           additional_text_colour, surface, self.game_width // 2 - 150, self.game_height - 50)
+                           additional_text_colour, surface, self.game_width // 2 - 200, self.game_height - 100)
 
     @staticmethod
     def play_music(soundfile, loop):

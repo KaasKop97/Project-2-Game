@@ -25,7 +25,6 @@ class MenuHelper:
         self.surface = surface
         self.conf = config_handler.ConfigHandler()
         self.misc = misc_helper.MiscHelper()
-        self.test = ""
 
     def create_button(self, text, x, y, width, height, text_colour, rect_colour=(66, 66, 66)):
         rect = pygame.draw.rect(
@@ -67,6 +66,7 @@ class MenuHelper:
         for key, value in self.rectangles.items():
             try:
                 if value.collidepoint(hover_pos[0], hover_pos[1]):
+                    print(key)
                     if key == "DRON":
                         hover_author = "Game made by: Mitchel"
                         display_text_hover = "Controls: WASD or the arrow keys. Press R to rety."
