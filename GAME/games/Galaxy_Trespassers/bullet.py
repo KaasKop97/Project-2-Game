@@ -23,7 +23,7 @@ class Bullet(pygame.sprite.Sprite):
         self.image.set_colorkey((0, 0, 0))
         self.rect.centerx = x
         self.rect.bottom = y
-        self.speedy = -10
+        self.speedy = -12
         self.spawn_time = pygame.time.get_ticks()
         self.hit = False
 
