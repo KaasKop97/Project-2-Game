@@ -41,7 +41,7 @@ class Dron:
 
     def load(self):
         try:
-            #self.misc.set_background(surface, os.path.abspath("games/DRON/data/floor.png"))
+            # self.misc.set_background(surface, os.path.abspath("games/DRON/data/floor.png"))
             self.misc.play_music(os.path.abspath("games/DRON/data/music.ogg"), 0)
         except pygame.error as e:
             self.log.write_log("ERROR", "Something died fix it you idiot: " + str(e))
@@ -91,24 +91,21 @@ class Dron:
 
         if dx <= 0 and dy <= 0:
             possible_moves = [0, 1, 3]
-            print("Left top")
+            #print("Left top")
         elif dx >= 0 and dy <= 0:
             possible_moves = [0, 1, 2]
-            print("right top")
+            #print("right top")
         elif dx <= 0 and dy >= 0:
             possible_moves = [1, 2, 3]
-            print("Left bottom")
+            #print("Left bottom")
         elif dx >= 0 and dy >= 0:
             possible_moves = [0, 1, 2]
-            print("right bottom")
+            #print("right bottom")
         else:
-            print("Idk where the fuck he is...")
+            print("Idk where he is...")
 
-        if random.randrange(0, 1000) > 900:
-
+        if random.randrange(0, 1000) > 950:
             self.opponent.direction = random.choice(possible_moves)
-
-
 
     def handle_line_thing(self):
         player_line = self.bike.line
@@ -120,12 +117,12 @@ class Dron:
             if player_rect.collidepoint(self.bike.hitbox[0], self.bike.hitbox[1]):
                 self.player_dead()
             elif player_rect.collidepoint(self.opponent.hitbox[0], self.opponent.hitbox[1]):
-                self.player_dead()
+                self.victory()
 
         for x in range(len(self.opponent.line)):
             cpu_rect = pygame.Rect(cpu_line[x])
             if cpu_rect.collidepoint(self.bike.hitbox[0], self.bike.hitbox[1]):
-                self.victory()
+                self.player_dead()
             elif cpu_rect.collidepoint(self.opponent.hitbox[0], self.opponent.hitbox[1]):
                 self.victory()
 
