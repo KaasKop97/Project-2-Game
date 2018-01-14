@@ -25,13 +25,13 @@ class GalaxyTrespassers:
 
         self.Player = Player()
         self.enemy1 = Enemy(os.path.join("games", "Galaxy_Trespassers", "data",
-                                         "enemy_ship_flying.png"))
+                                         "enemy_ship_flying.png"), 1, 50 )
         self.enemy2 = Enemy(os.path.join("games", "Galaxy_Trespassers", "data",
-                                         "enemy_ship_flying2.png"))
+                                         "enemy_ship_flying2.png"), 1.5, 100)
         self.enemy3 = Enemy(os.path.join("games", "Galaxy_Trespassers", "data",
-                                         "enemy_ship_flying3.png"))
+                                         "enemy_ship_flying3.png"), 2, 200)
         self.enemy4 = Enemy(os.path.join("games", "Galaxy_Trespassers", "data",
-                                         "enemy_ship_flying4.png"))
+                                         "enemy_ship_flying4.png"), 3, 500)
         self.bullet = None
         self.explosion = None
         self.Player.score = 0
@@ -52,13 +52,13 @@ class GalaxyTrespassers:
             if self.bullet.rect.bottom < 18:
                 self.sprite_group.remove(self.bullet)
                 self.bullet = None
-            elif self.bullet.hit and pygame.time.get_ticks() >= self.bullet.spawn_time + 1000:
+            elif self.bullet.hit and pygame.time.get_ticks() >= self.bullet.spawn_time + 600:
                 self.sprite_group.remove(self.bullet)
                 self.bullet = None
         self.collision()
         self.sprite_group.update()
         self.sprite_group.draw(self.surface)
-        self.misc.draw_text("Verdana", 30, "Score: " + str(self.Player.killed), (255, 255, 255), self.surface, 100, 100)
+        self.misc.draw_text("Verdana", 15, "Score: " + str(self.Player.killed), (255, 255, 255), self.surface, 70, 70)
 
     def mousebutton_down(self, surface, event):
         pass
@@ -114,14 +114,18 @@ class GalaxyTrespassers:
     def died(self):
         self.explosion = Explosion(self.Player.rect.center)
         self.sprite_group.add(self.explosion)
-        self.misc.draw_text("verdana", 63, "YOU DIED!", (255, 0, 0), self.surface, 300, 100)
-        self.misc.draw_text("verdana", 63, "Your score: " + str(self.Player.killed), (255, 255, 255), self.surface, 300,
-                            200)
+        self.misc.draw_text("verdana", 70, "YOU DIED!", (255, 0, 0), self.surface, 210, 190)
+        self.misc.draw_text("verdana", 20, "press ESC to play another game", (255, 255, 255), self.surface, 233,
+                            280)
+        self.misc.draw_text("verdana", 40, "Your score: " + str(self.Player.killed), (255, 255, 255), self.surface, 258,
+                            350)
 
     def invaded(self):
-        self.misc.draw_text("verdana", 63, "INVADED", (255, 0, 0), self.surface, 300, 100)
-        self.misc.draw_text("verdana", 63, "Your score: " + str(self.Player.killed), (255, 255, 255), self.surface, 300,
-                            200)
+        self.misc.draw_text("verdana", 70, "INVADED", (0, 0, 255), self.surface, 225, 190)
+        self.misc.draw_text("verdana", 20, "press ESC to play another game", (255, 255, 255), self.surface, 233,
+                            280)
+        self.misc.draw_text("verdana", 40, "Your score: " + str(self.Player.killed), (255, 255, 255), self.surface, 252,
+                            350)
 
     def collision(self):
         for x in range(len(self.enemies)):

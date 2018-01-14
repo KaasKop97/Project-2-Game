@@ -9,7 +9,7 @@ from handlers import config_handler
 
 
 class Enemy(pygame.sprite.Sprite):
-    def __init__(self, image):
+    def __init__(self, image, speed, score):
         pygame.sprite.Sprite.__init__(self)
         self.misc = misc_helper.MiscHelper()
         self.conf = config_handler.ConfigHandler()
@@ -23,8 +23,8 @@ class Enemy(pygame.sprite.Sprite):
         self.radius = int(self.rect.width / 3)
         self.rect.x = random.randrange(0, self.game_width - self.rect.width)
         self.rect.y = random.randrange(-600, -100)
-        self.speedy = 2
-        Enemy.score = 50
+        self.speedy = speed
+        Enemy.score = score
 
     def update(self):
         self.rect.y += self.speedy
