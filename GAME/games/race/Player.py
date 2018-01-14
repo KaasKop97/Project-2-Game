@@ -21,19 +21,7 @@ class Player (pygame.sprite.Sprite):
         self.game_height        =       int(self.conf.get_value("game", "height"))
         self.changeX            =       0
         self.dead               =       False
-<<<<<<< HEAD
-<<<<<<< HEAD
-        self.dodge_count        =       self.truck.dodged
-=======
-<<<<<<< HEAD
-        # self.dodge_count        =       self.Truck.dodged
-=======
-        #self.dodge_count        =       self.truck.dodged
->>>>>>> 2b0ee0e411bd7ad65d7e7832f1953d27bf57ae28
->>>>>>> 0613ffd070f5a426a758fab9bdc2cc7fa0aebd19
-=======
         self.score              =       0
->>>>>>> e613650de38a026338c022a6fff8a6cd367cdc42
 
     def update(self):
         self.rect.move_ip(self.changeX, 0)
