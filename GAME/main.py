@@ -28,12 +28,10 @@ class Main:
         self.game_handler = game_handler.GameHandler(self.background)
 
     def main_loop(self):
-        menu_to_draw = ""
+        #menu_to_draw = ""
         self.menu.draw_menu("main")
         while self.running:
             self.clock.tick(60)
-            if not menu_to_draw == "":
-                self.menu.draw_menu(menu_to_draw)
             if not self.game_handler.loaded_game:
                 pygame.mouse.set_visible(True)
                 for event in pygame.event.get():
@@ -41,8 +39,8 @@ class Main:
                         button_pressed = self.menu.get_button_pressed(event.pos)
                         if not button_pressed == self.menu.currently_drawn:
                             if button_pressed == "PLAY":
-                                menu_to_draw = "PLAY"
-                                #self.menu.draw_menu("PLAY")
+                                #menu_to_draw = "PLAY"
+                                self.menu.draw_menu("PLAY")
                             elif button_pressed == "QUIT":
                                 self.running = False
                                 pygame.quit()
@@ -59,7 +57,8 @@ class Main:
                     elif event.type == pygame.QUIT:
                         print("Quitting")
                         self.running = False
-                self.menu.get_hover(pygame.mouse.get_pos())
+                        pygame.quit()
+                #self.menu.get_hover(pygame.mouse.get_pos())
             else:
                 pygame.mouse.set_visible(False)
                 self.menu.reset_menu()
@@ -73,8 +72,8 @@ class Main:
                         self.game_handler.key_down(event.key)
                         if event.key == 27:
                             self.game_handler.unload_game()
-                            menu_to_draw = "main"
-                            #self.menu.draw_menu("main")
+                            #menu_to_draw = "main"
+                            self.menu.draw_menu("main")
                     elif event.type == pygame.KEYUP:
                         self.game_handler.key_up(event.key)
                     elif event.type == pygame.QUIT:

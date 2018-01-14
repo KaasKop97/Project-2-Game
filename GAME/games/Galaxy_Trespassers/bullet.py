@@ -31,7 +31,6 @@ class Bullet(pygame.sprite.Sprite):
         self.rect.y += self.speedy
 
     def explode(self, center):
-        #self.tick_tock = pygame.time.get_ticks()
         self.image = self.explosion
         self.rect = self.rect_explosion
         self.speedy = 0

@@ -67,7 +67,6 @@ class MenuHelper:
         for key, value in self.rectangles.items():
             try:
                 if value.collidepoint(hover_pos[0], hover_pos[1]):
-                    print(key)
                     if key == "DRON":
                         hover_author = "Game made by: Mitchel"
                         display_text_hover = "Controls: WASD or the arrow keys. Press R to rety."

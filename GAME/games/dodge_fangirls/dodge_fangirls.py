@@ -102,7 +102,7 @@ class DodgeFangirls:
         #                     self.game_height // 2)
         # self.misc.draw_text("freesanbold.ttf", 30, "Press ESC to play another game", (255, 0, 0), self.gamedisplay,
         #                     250, 0)
-        self.misc.game_over(str(self.score), self.gamedisplay, "You bumped into an ex", "verdana", 20, (255, 255, 255))
+        self.misc.game_over(str(self.score), self.gamedisplay, "Cause of death: You bumped into an ex", "verdana", 20, (255, 255, 255))
 
         self.sprite_group.empty()
 
