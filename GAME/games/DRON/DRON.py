@@ -33,16 +33,16 @@ class Dron:
         self.surface.fill((0, 0, 0))
         self.score = len(self.bike.line)
         self.misc.draw_text("Verdana", 20, "Score: " + str(self.score), (255, 255, 255), self.surface, 10, 10)
-        if self.bike.dead:
-            self.player_dead()
-        elif self.opponent.dead:
-            self.victory()
 
         if not self.bike.dead or self.opponent.dead:
             self.handle_cpu_players()
         self.handle_line_thing()
         self.sprite_group.update()
         self.sprite_group.draw(self.surface)
+        if self.bike.dead:
+            self.player_dead()
+        elif self.opponent.dead:
+            self.victory()
 
     def load(self):
         try:

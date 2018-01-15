@@ -65,6 +65,9 @@ class Main:
                                 self.menu = None
                             else:
                                 print("ERROR: Can't load button since there is no definition for it.")
+                    elif event.type == pygame.KEYDOWN:
+                        if event.key == 27 and menu_to_draw == "PLAY":
+                            menu_to_draw = "main"
                     elif event.type == pygame.QUIT:
                         print("Quitting")
                         self.running = False
@@ -84,7 +87,7 @@ class Main:
                             self.game_handler.unload_game()
                             menu_to_draw = "main"
                             self.menu = menu_helper.MenuHelper(self.background)
-                            #self.menu.draw_menu("main")
+                            # self.menu.draw_menu("main")
                     elif event.type == pygame.KEYUP:
                         self.game_handler.key_up(event.key)
                     elif event.type == pygame.QUIT:
@@ -93,6 +96,7 @@ class Main:
 
             self.screen.blit(self.background, (0, 0))
             pygame.display.update()
+
 
 game = Main()
 game.main_loop()
