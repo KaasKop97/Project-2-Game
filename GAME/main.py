@@ -66,7 +66,7 @@ class Main:
                             else:
                                 print("ERROR: Can't load button since there is no definition for it.")
                     elif event.type == pygame.KEYDOWN:
-                        if event.key == 27 and menu_to_draw == "PLAY":
+                        if event.key == 27 and not menu_to_draw == "main":
                             menu_to_draw = "main"
                     elif event.type == pygame.QUIT:
                         print("Quitting")

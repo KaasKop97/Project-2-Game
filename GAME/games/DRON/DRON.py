@@ -95,16 +95,16 @@ class Dron:
 
         if dx <= 0 and dy <= 0:
             possible_moves = [0, 1, 3]
-            #print("Left top")
+            # print("Left top")
         elif dx >= 0 and dy <= 0:
             possible_moves = [0, 1, 2]
-            #print("right top")
+            # print("right top")
         elif dx <= 0 and dy >= 0:
             possible_moves = [1, 2, 3]
-            #print("Left bottom")
+            # print("Left bottom")
         elif dx >= 0 and dy >= 0:
             possible_moves = [0, 1, 2]
-            #print("right bottom")
+            # print("right bottom")
         else:
             print("Idk where he is...")
 
@@ -115,33 +115,59 @@ class Dron:
         player_line = self.bike.line
         cpu_line = self.opponent.line
 
+        player_hit = False
+        cpu_hit = False
         # Checking if the player hit a line
         for x in range(len(self.bike.line)):
             player_rect = pygame.Rect(player_line[x])
             if player_rect.collidepoint(self.bike.hitbox[0], self.bike.hitbox[1]):
-                self.player_dead()
+                if not cpu_hit:
+                    self.player_dead()
+                player_hit = True
+
             elif player_rect.collidepoint(self.opponent.hitbox[0], self.opponent.hitbox[1]):
-                self.victory()
+                if not cpu_hit:
+                    self.victory()
+                player_hit = True
 
         for x in range(len(self.opponent.line)):
             cpu_rect = pygame.Rect(cpu_line[x])
             if cpu_rect.collidepoint(self.bike.hitbox[0], self.bike.hitbox[1]):
-                self.player_dead()
+                if not player_hit:
+                    self.player_dead()
+                player_hit = True
             elif cpu_rect.collidepoint(self.opponent.hitbox[0], self.opponent.hitbox[1]):
-                self.victory()
+                if not player_hit:
+                    self.victory()
+                player_hit = True
+        if player_hit and cpu_hit:
+            self.draw()
 
     def victory(self):
+        self.surface.fill((0, 0, 0))
         self.bike.direction = 4
         self.opponent.direction = 4
-        self.misc.draw_text("Inconsolate", 30, "You've won! Press R to retry, or press ESC to quit.", (255, 255, 255), self.surface, self.game_width // 2 - 250, self.game_height // 2)
+        self.misc.draw_text("Inconsolate", 30, "You've won! Press R to retry, or press ESC to quit.", (255, 255, 255),
+                            self.surface, self.game_width // 2 - 250, self.game_height // 2)
+
+    def draw(self):
+        self.bike.direction = 4
+        self.opponent.direction = 4
+        self.misc.draw_text("Inconsolata", 30, "", (255, 255, 255), self.surface, self.game_width // 2 - 250,
+                            self.game_height // 2)
 
     def player_dead(self):
+        self.surface.fill((0, 0, 0))
         self.bike.direction = 4
         self.opponent.direction = 4
-        self.misc.draw_text("Inconsolate", 30, "You're dead! Press R to retry, or press ESC to quit.", (255, 255, 255), self.surface, self.game_width // 2 - 250, self.game_height // 2)
+        self.misc.draw_text("Inconsolate", 30, "You're dead! Press R to retry, or press ESC to quit.", (255, 255, 255),
+                            self.surface, self.game_width // 2 - 250, self.game_height // 2)
 
     def restart_game(self):
         self.misc.stop_music()
+        self.bike = None
+        self.opponent = None
+        self.sprite_group.empty()
         self.__init__(self.surface)
         self.load()
 
