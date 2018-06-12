@@ -30,6 +30,6 @@ class Truck(pygame.sprite.Sprite):
         if self.rect.y > self.game_height + 10:
             self.rect.x = random.randrange(0, self.game_width)
             self.rect.y = -30
-            self.speed += 0.5
+            self.speed += 0.2
             self.dodge_count += 1
 
